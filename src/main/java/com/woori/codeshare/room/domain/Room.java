@@ -4,7 +4,6 @@ import com.woori.codeshare.snapshot.domain.Snapshot;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import nonapi.io.github.classgraph.json.Id;
 
 import java.time.LocalDateTime;
 import java.util.List;
