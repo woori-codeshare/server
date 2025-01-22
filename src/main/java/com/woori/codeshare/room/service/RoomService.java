@@ -27,6 +27,11 @@ public class RoomService {
      * @return Room 생성 응답 DTO
      */
     public RoomResponseDTO.RoomCreateResponse createRoom(RoomRequestDTO.RoomCreateRequest request) {
+        boolean exists = roomRepository.checkDuplicateTitle(request.getTitle());
+        if (exists) {
+            throw new RoomException(RoomErrorCode.DUPLICATE_ROOM_TITLE); // 중복 예외 발생
+        }
+
         // 비밀번호 암호화
         String encryptedPassword = passwordEncoder.encode(request.getPassword());
 
