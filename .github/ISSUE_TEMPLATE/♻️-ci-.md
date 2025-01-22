@@ -1,8 +1,8 @@
 ---
-name: "[CI/CD]"
-about: "\bCI/CD 관련 설정, 개선, 문제 해결을 위한 이슈 템플릿입니다."
-title: "[Ci/Cd]"
-labels: ci/cd
+name: "\U0001F4BB [ci/cd]"
+about: CI/CD 관련 설정, 개선, 문제 해결을 위한 이슈 템플릿입니다.
+title: "\U0001F4BB [ci/cd]"
+labels: ci, enhancement
 assignees: ''
 
 ---
@@ -18,3 +18,4 @@ assignees: ''
 
 ### 📢 특이 사항
 <!-- CI/CD 설정이나 테스트 중 발견한 문제, 주의 사항, 리뷰어에게 특별히 알려야 할 부분 등을 적어주세요. -->
+
