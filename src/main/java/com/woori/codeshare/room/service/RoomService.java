@@ -1,6 +1,7 @@
 package com.woori.codeshare.room.service;
 
 
+import com.woori.codeshare.room.controller.dto.RoomRequestDTO;
 import com.woori.codeshare.room.controller.dto.RoomResponseDTO;
 import com.woori.codeshare.room.domain.Room;
 import com.woori.codeshare.room.repository.RoomRepository;
@@ -20,22 +21,28 @@ public class RoomService {
     /**
      * 방 생성 로직
      *
-     * @param title       방 제목
-     * @param rawPassword 사용자 입력 비밀번호
-     * @return 생성된 방 정보를 포함한 DTO
+     * @param request Room 생성 요청 DTO
+     * @return Room 생성 응답 DTO
      */
-    public RoomResponseDTO.RoomCreateResponse createRoom(String title, String rawPassword) {
-        String encryptedPassword = passwordEncoder.encode(rawPassword);  // 비밀번호 암호화
-        String uuid = UUID.randomUUID().toString();  // 고유 식별자 생성
+    public RoomResponseDTO.RoomCreateResponse createRoom(RoomRequestDTO.RoomCreateRequest request) {
+        // 비밀번호 암호화
+        String encryptedPassword = passwordEncoder.encode(request.getPassword());
 
+        // 고유 식별자 생성
+        String uuid = UUID.randomUUID().toString();
+
+        // Room 엔티티 생성 및 저장
         Room room = new Room();
         room.setUuid(uuid);
-        room.setTitle(title);
+        room.setTitle(request.getTitle());
         room.setPassword(encryptedPassword);
+        Room savedRoom = roomRepository.save(room);
 
-        Room savedRoom = roomRepository.save(room);  // DB 저장
-
-        // DTO 생성 및 반환
-        return new RoomResponseDTO.RoomCreateResponse(savedRoom.getRoomId(), savedRoom.getTitle(), savedRoom.getUuid());
+        // RoomCreateResponse 객체 생성
+        return RoomResponseDTO.RoomCreateResponse.builder()
+                .roomId(savedRoom.getRoomId())
+                .uuid(savedRoom.getUuid())
+                .title(savedRoom.getTitle())
+                .build();
     }
 }
