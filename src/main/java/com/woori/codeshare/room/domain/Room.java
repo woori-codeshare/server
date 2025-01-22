@@ -15,7 +15,7 @@ public class Room {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long roomId;  // 방 고유 ID (PK)
+    private Long roomId;  // 방 고유 ID
 
     @Column(unique = true, nullable = false)
     private String uuid;  // 클라이언트용 방 고유 식별자
@@ -24,7 +24,7 @@ public class Room {
     private String title;  // 방 제목
 
     @Column(nullable = false)
-    private String password;  // 암호화된 방 비밀번호
+    private String password;  // 방 비밀번호
 
     private LocalDateTime createdAt;  // 방 생성 시각
 
