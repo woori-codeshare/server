@@ -6,7 +6,6 @@ import lombok.Getter;
 public enum ResponseCode {
 
     SUCCESS("SUCCESS_200", "정상 처리되었습니다."),
-    CREATE("CREATE_201", "정상적으로 생성되었습니다."),
     CONFIRM("CONFIRM_202", "검증 및 확인 되었습니다.");
 
     private final String code;
