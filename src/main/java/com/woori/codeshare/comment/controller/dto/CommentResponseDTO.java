@@ -25,7 +25,7 @@ public class CommentResponseDTO {
     @AllArgsConstructor
     public static class CommentResolveResponse {
         private Long commentId;
-        private boolean isChecked;
+        private boolean solved;
     }
 
     @Getter

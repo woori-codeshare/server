@@ -6,6 +6,7 @@ import com.woori.codeshare.comment.service.CommentService;
 import com.woori.codeshare.global.response.ApiResponse;
 import com.woori.codeshare.global.response.ResponseCode;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -41,12 +42,14 @@ public class CommentController {
      * @param request 해결 여부 업데이트 요청 DTO
      * @return 해결 여부 업데이트 응답 DTO
      */
-    @PatchMapping("/resolve")
+    @PatchMapping("/{commentId}/resolve")
     @Operation(summary = "질문 해결 여부 업데이트 API", description = "특정 댓글의 해결 여부를 업데이트합니다.")
     public ResponseEntity<ApiResponse<CommentResponseDTO.CommentResolveResponse>> resolveComment(
+            @Parameter(description = "댓글 ID", required = true, example = "1")
+            @PathVariable(name = "commentId") Long commentId,
             @RequestBody @Valid CommentRequestDTO.CommentResolveRequest request) {
 
-        CommentResponseDTO.CommentResolveResponse responseDTO = commentService.resolveComment(request);
+        CommentResponseDTO.CommentResolveResponse responseDTO = commentService.resolveComment(commentId, request);
         return ResponseEntity.ok(ApiResponse.of(ResponseCode.SUCCESS, responseDTO));
     }
 
@@ -56,12 +59,14 @@ public class CommentController {
      * @param request 수정 요청 DTO
      * @return 수정된 질문 응답 DTO
      */
-    @PatchMapping("/update")
+    @PatchMapping("/{commentId}/update")
     @Operation(summary = "질문 수정 API", description = "댓글 ID를 사용하여 질문 내용을 수정합니다.")
     public ResponseEntity<ApiResponse<CommentResponseDTO.CommentUpdateResponse>> updateComment(
+            @Parameter(description = "댓글 ID", required = true, example = "1")
+            @PathVariable(name = "commentId") Long commentId,
             @RequestBody @Valid CommentRequestDTO.CommentUpdateRequest request) {
 
-        CommentResponseDTO.CommentUpdateResponse responseDTO = commentService.updateComment(request);
+        CommentResponseDTO.CommentUpdateResponse responseDTO = commentService.updateComment(commentId, request);
         return ResponseEntity.ok(ApiResponse.of(ResponseCode.SUCCESS, responseDTO));
     }
 }

@@ -37,7 +37,7 @@ public class CommentService {
         Comment comment = new Comment();
         comment.setSnapshot(snapshot);
         comment.setContent(request.getContent());
-        comment.setChecked(false);
+        comment.setSolved(false);
         Comment savedComment = commentRepository.save(comment);
 
         return CommentResponseDTO.CommentCreateResponse.builder()
@@ -54,16 +54,16 @@ public class CommentService {
      * @return 업데이트된 댓글 응답 DTO
      */
     @Transactional
-    public CommentResponseDTO.CommentResolveResponse resolveComment(CommentRequestDTO.CommentResolveRequest request) {
-        Comment comment = commentRepository.findById(request.getCommentId())
+    public CommentResponseDTO.CommentResolveResponse resolveComment(Long commentId, CommentRequestDTO.CommentResolveRequest request) {
+        Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CommentException(CommentErrorCode.COMMENT_NOT_FOUND));
 
-        comment.setChecked(request.isChecked());
+        comment.setSolved(request.isSolved());
         Comment updatedComment = commentRepository.save(comment);
 
         return CommentResponseDTO.CommentResolveResponse.builder()
                 .commentId(updatedComment.getCommentId())
-                .isChecked(updatedComment.isChecked())
+                .solved(updatedComment.isSolved())
                 .build();
     }
 
@@ -74,8 +74,8 @@ public class CommentService {
      * @return 수정된 댓글 응답 DTO
      */
     @Transactional
-    public CommentResponseDTO.CommentUpdateResponse updateComment(CommentRequestDTO.CommentUpdateRequest request) {
-        Comment comment = commentRepository.findById(request.getCommentId())
+    public CommentResponseDTO.CommentUpdateResponse updateComment(Long commentId, CommentRequestDTO.CommentUpdateRequest request) {
+        Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CommentException(CommentErrorCode.COMMENT_NOT_FOUND));
 
         comment.setContent(request.getContent());

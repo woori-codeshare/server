@@ -23,7 +23,7 @@ public class Comment {
     @Column(nullable = false)
     private String content;
 
-    private boolean isChecked;
+    private boolean solved;
 
     private LocalDateTime createdAt;
 
