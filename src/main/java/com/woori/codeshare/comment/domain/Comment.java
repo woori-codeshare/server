@@ -1,5 +1,6 @@
-package com.woori.codeshare.snapshot.domain;
+package com.woori.codeshare.comment.domain;
 
+import com.woori.codeshare.snapshot.domain.Snapshot;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,9 +23,11 @@ public class Comment {
     @Column(nullable = false)
     private String content;
 
-    private boolean isChecked;
+    private boolean solved;
 
     private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
 
     @PrePersist
     public void prePersist() {

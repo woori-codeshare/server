@@ -93,7 +93,7 @@ public class SnapshotService {
                 .comments(snapshot.getComments().stream().map(comment -> SnapshotResponseDTO.CommentDetailResponse.builder()
                         .commentId(comment.getCommentId())
                         .content(comment.getContent())
-                        .isChecked(comment.isChecked())
+                        .solved(comment.isSolved())
                         .createdAt(comment.getCreatedAt())
                         .build()).toList())
                 .build()).toList();

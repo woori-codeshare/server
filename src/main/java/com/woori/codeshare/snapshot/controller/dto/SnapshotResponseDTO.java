@@ -44,7 +44,7 @@ public class SnapshotResponseDTO {
     public static class CommentDetailResponse {
         private Long commentId;
         private String content;
-        private boolean isChecked;
+        private boolean solved;
         private LocalDateTime createdAt;
     }
 }

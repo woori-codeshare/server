@@ -1,4 +1,4 @@
-package com.woori.codeshare.socket.config;
+package com.woori.codeshare.global.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
