@@ -69,4 +69,19 @@ public class CommentController {
         CommentResponseDTO.CommentUpdateResponse responseDTO = commentService.updateComment(commentId, request);
         return ResponseEntity.ok(ApiResponse.of(ResponseCode.SUCCESS, responseDTO));
     }
+
+    /**
+     * 질문 삭제 API
+     *
+     * @param commentId 댓글 ID
+     * @return 성공 메시지
+     */
+    @DeleteMapping("/{commentId}")
+    @Operation(summary = "질문 삭제 API", description = "특정 댓글을 삭제합니다.")
+    public ResponseEntity<ApiResponse<Void>> deleteComment(
+            @Parameter(description = "댓글 ID", required = true, example = "1")
+            @PathVariable(name = "commentId") Long commentId) {
+        commentService.deleteComment(commentId);
+        return ResponseEntity.ok(ApiResponse.of(ResponseCode.SUCCESS, null));
+    }
 }

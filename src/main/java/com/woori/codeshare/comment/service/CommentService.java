@@ -89,4 +89,16 @@ public class CommentService {
                 .updatedAt(updatedComment.getUpdatedAt())
                 .build();
     }
+
+    /**
+     * 질문 삭제 로직
+     *
+     * @param commentId 삭제할 댓글 ID
+     */
+    @Transactional
+    public void deleteComment(Long commentId) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new CommentException(CommentErrorCode.COMMENT_NOT_FOUND));
+        commentRepository.delete(comment);
+    }
 }
