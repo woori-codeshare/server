@@ -30,11 +30,9 @@ public class SnapshotService {
      */
     @Transactional
     public SnapshotResponseDTO.SnapshotCreateResponse saveSnapshot(SnapshotRequestDTO.SnapshotCreateRequest request) {
-        // 방 ID로 Room 조회
         Room room = roomRepository.findById(request.getRoomId())
                 .orElseThrow(() -> new RoomException(RoomErrorCode.ROOM_NOT_FOUND));
 
-        // 스냅샷 제목 기본값 설정
         String snapshotTitle = request.getTitle();
         if (snapshotTitle == null || snapshotTitle.trim().isEmpty()) {
             snapshotTitle = getCurrentFormattedTime(); // 제목이 없을 경우 시간으로 설정

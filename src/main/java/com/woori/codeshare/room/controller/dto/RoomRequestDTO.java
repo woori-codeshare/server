@@ -11,7 +11,7 @@ public class RoomRequestDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class RoomCreateRequest {
-        private String title;    // 방 제목
-        private String password; // 방 비밀번호
+        private String title;
+        private String password;
     }
 }

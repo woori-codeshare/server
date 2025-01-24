@@ -13,21 +13,21 @@ public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long commentId;  // 댓글 고유 ID (PK)
+    private Long commentId;
 
     @ManyToOne
     @JoinColumn(name = "snapshot_id", nullable = false)
-    private Snapshot snapshot;  // 댓글이 연결된 스냅샷 (FK)
+    private Snapshot snapshot;
 
     @Lob
-    private String content;  // 댓글 내용
+    private String content;
 
-    private boolean isChecked;  // 댓글 확인 여부 (해결됨 여부)
+    private boolean isChecked;
 
-    private LocalDateTime createdAt;  // 댓글 생성 시각
+    private LocalDateTime createdAt;
 
     @PrePersist
     public void prePersist() {
-        this.createdAt = LocalDateTime.now();  // 생성 시각 자동 설정
+        this.createdAt = LocalDateTime.now();
     }
 }

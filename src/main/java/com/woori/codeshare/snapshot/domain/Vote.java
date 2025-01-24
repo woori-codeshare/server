@@ -11,14 +11,14 @@ public class Vote {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long voteId;  // 투표 고유 ID (PK)
+    private Long voteId;
 
     @ManyToOne
     @JoinColumn(name = "snapshot_id", nullable = false)
-    private Snapshot snapshot;  // 투표가 연결된 스냅샷 (FK)
+    private Snapshot snapshot;
 
-    private String title;  // 투표 제목 (optional)
+    private String title;
 
-    private int positive;  // 긍정 투표 수
-    private int negative;  // 부정 투표 수
+    private int positive;
+    private int negative;
 }

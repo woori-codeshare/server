@@ -16,7 +16,6 @@ public class NoProfanityValidator implements ConstraintValidator<NoProfanity, St
             return true;
         }
 
-        // 욕설 검증
         for (String profanity : PROFANITIES) {
             if (value.contains(profanity)) {
                 return false;
