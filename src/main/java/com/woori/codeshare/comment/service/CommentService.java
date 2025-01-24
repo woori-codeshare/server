@@ -14,6 +14,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 public class CommentService {
@@ -32,14 +34,12 @@ public class CommentService {
         Snapshot snapshot = snapshotRepository.findById(request.getSnapshotId())
                 .orElseThrow(() -> new SnapshotException(SnapshotErrorCode.SNAPSHOT_NOT_FOUND));
 
-        // 댓글 생성 및 저장
         Comment comment = new Comment();
         comment.setSnapshot(snapshot);
         comment.setContent(request.getContent());
         comment.setChecked(false);
         Comment savedComment = commentRepository.save(comment);
 
-        // 응답 DTO 생성
         return CommentResponseDTO.CommentCreateResponse.builder()
                 .commentId(savedComment.getCommentId())
                 .snapshotId(snapshot.getSnapshotId())
@@ -55,18 +55,38 @@ public class CommentService {
      */
     @Transactional
     public CommentResponseDTO.CommentResolveResponse resolveComment(CommentRequestDTO.CommentResolveRequest request) {
-        // Comment 조회
         Comment comment = commentRepository.findById(request.getCommentId())
                 .orElseThrow(() -> new CommentException(CommentErrorCode.COMMENT_NOT_FOUND));
 
-        // 해결 여부 업데이트
         comment.setChecked(request.isChecked());
         Comment updatedComment = commentRepository.save(comment);
 
-        // 응답 DTO 생성
         return CommentResponseDTO.CommentResolveResponse.builder()
                 .commentId(updatedComment.getCommentId())
                 .isChecked(updatedComment.isChecked())
+                .build();
+    }
+
+    /**
+     * 질문 내용 수정 로직
+     *
+     * @param request 수정 요청 DTO
+     * @return 수정된 댓글 응답 DTO
+     */
+    @Transactional
+    public CommentResponseDTO.CommentUpdateResponse updateComment(CommentRequestDTO.CommentUpdateRequest request) {
+        Comment comment = commentRepository.findById(request.getCommentId())
+                .orElseThrow(() -> new CommentException(CommentErrorCode.COMMENT_NOT_FOUND));
+
+        comment.setContent(request.getContent());
+        comment.setUpdatedAt(LocalDateTime.now());
+
+        Comment updatedComment = commentRepository.save(comment);
+
+        return CommentResponseDTO.CommentUpdateResponse.builder()
+                .commentId(updatedComment.getCommentId())
+                .content(updatedComment.getContent())
+                .updatedAt(updatedComment.getUpdatedAt())
                 .build();
     }
 }

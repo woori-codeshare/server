@@ -49,4 +49,19 @@ public class CommentController {
         CommentResponseDTO.CommentResolveResponse responseDTO = commentService.resolveComment(request);
         return ResponseEntity.ok(ApiResponse.of(ResponseCode.SUCCESS, responseDTO));
     }
+
+    /**
+     * 질문 수정 API
+     *
+     * @param request 수정 요청 DTO
+     * @return 수정된 질문 응답 DTO
+     */
+    @PatchMapping("/update")
+    @Operation(summary = "질문 수정 API", description = "댓글 ID를 사용하여 질문 내용을 수정합니다.")
+    public ResponseEntity<ApiResponse<CommentResponseDTO.CommentUpdateResponse>> updateComment(
+            @RequestBody @Valid CommentRequestDTO.CommentUpdateRequest request) {
+
+        CommentResponseDTO.CommentUpdateResponse responseDTO = commentService.updateComment(request);
+        return ResponseEntity.ok(ApiResponse.of(ResponseCode.SUCCESS, responseDTO));
+    }
 }

@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 public class CommentResponseDTO {
 
     @Getter
@@ -24,5 +26,15 @@ public class CommentResponseDTO {
     public static class CommentResolveResponse {
         private Long commentId;
         private boolean isChecked;
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CommentUpdateResponse {
+        private Long commentId;
+        private String content;
+        private LocalDateTime updatedAt;
     }
 }

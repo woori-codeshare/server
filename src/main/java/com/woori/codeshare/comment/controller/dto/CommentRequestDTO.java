@@ -26,4 +26,12 @@ public class CommentRequestDTO {
         private Long commentId;
         private boolean isChecked;
     }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CommentUpdateRequest {
+        private Long commentId;
+        private String content;
+    }
 }
