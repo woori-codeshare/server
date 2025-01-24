@@ -1,5 +1,6 @@
-package com.woori.codeshare.snapshot.domain;
+package com.woori.codeshare.comment.domain;
 
+import com.woori.codeshare.snapshot.domain.Snapshot;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;

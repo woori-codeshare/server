@@ -1,4 +1,4 @@
-package com.woori.codeshare.snapshot.controller.dto;
+package com.woori.codeshare.comment.controller.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -17,5 +17,13 @@ public class CommentRequestDTO {
 
         @NotBlank(message = "댓글 내용은 필수입니다.")
         private String content;
+    }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CommentResolveRequest {
+        private Long commentId;
+        private boolean isChecked;
     }
 }

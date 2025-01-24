@@ -1,19 +1,16 @@
-package com.woori.codeshare.snapshot.controller;
+package com.woori.codeshare.comment.controller;
 
+import com.woori.codeshare.comment.controller.dto.CommentRequestDTO;
+import com.woori.codeshare.comment.controller.dto.CommentResponseDTO;
+import com.woori.codeshare.comment.service.CommentService;
 import com.woori.codeshare.global.response.ApiResponse;
 import com.woori.codeshare.global.response.ResponseCode;
-import com.woori.codeshare.snapshot.controller.dto.CommentRequestDTO;
-import com.woori.codeshare.snapshot.controller.dto.CommentResponseDTO;
-import com.woori.codeshare.snapshot.service.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -35,6 +32,21 @@ public class CommentController {
             @RequestBody @Valid CommentRequestDTO.CommentCreateRequest request) {
 
         CommentResponseDTO.CommentCreateResponse responseDTO = commentService.addComment(request);
+        return ResponseEntity.ok(ApiResponse.of(ResponseCode.SUCCESS, responseDTO));
+    }
+
+    /**
+     * 질문 해결 여부 업데이트 API
+     *
+     * @param request 해결 여부 업데이트 요청 DTO
+     * @return 해결 여부 업데이트 응답 DTO
+     */
+    @PatchMapping("/resolve")
+    @Operation(summary = "질문 해결 여부 업데이트 API", description = "특정 댓글의 해결 여부를 업데이트합니다.")
+    public ResponseEntity<ApiResponse<CommentResponseDTO.CommentResolveResponse>> resolveComment(
+            @RequestBody @Valid CommentRequestDTO.CommentResolveRequest request) {
+
+        CommentResponseDTO.CommentResolveResponse responseDTO = commentService.resolveComment(request);
         return ResponseEntity.ok(ApiResponse.of(ResponseCode.SUCCESS, responseDTO));
     }
 }
