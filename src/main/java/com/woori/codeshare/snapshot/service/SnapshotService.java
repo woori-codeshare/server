@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -67,5 +68,34 @@ public class SnapshotService {
     private String getCurrentFormattedTime() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 M월 d일, HH:mm");
         return LocalDateTime.now().format(formatter);
+    }
+
+    /**
+     * 스냅샷 목록 조회
+     *
+     * @param roomId 방 ID
+     * @return 스냅샷 상세 목록 응답 DTO
+     */
+    @Transactional
+    public List<SnapshotResponseDTO.SnapshotDetailResponse> getSnapshots(Long roomId) {
+        Room room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new RoomException(RoomErrorCode.ROOM_NOT_FOUND));
+
+        List<Snapshot> snapshots = snapshotRepository.findSnapshotsWithCommentsByRoomAndCreatedAtAfter(room, room.getCreatedAt());
+
+        // 스냅샷 목록 변환
+        return snapshots.stream().map(snapshot -> SnapshotResponseDTO.SnapshotDetailResponse.builder()
+                .snapshotId(snapshot.getSnapshotId())
+                .title(snapshot.getTitle())
+                .description(snapshot.getDescription())
+                .code(snapshot.getCode())
+                .createdAt(snapshot.getCreatedAt())
+                .comments(snapshot.getComments().stream().map(comment -> SnapshotResponseDTO.CommentDetailResponse.builder()
+                        .commentId(comment.getCommentId())
+                        .content(comment.getContent())
+                        .isChecked(comment.isChecked())
+                        .createdAt(comment.getCreatedAt())
+                        .build()).toList())
+                .build()).toList();
     }
 }

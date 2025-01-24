@@ -19,7 +19,7 @@ public class Comment {
     @JoinColumn(name = "snapshot_id", nullable = false)
     private Snapshot snapshot;
 
-    @Lob
+    @Column(nullable = false)
     private String content;
 
     private boolean isChecked;

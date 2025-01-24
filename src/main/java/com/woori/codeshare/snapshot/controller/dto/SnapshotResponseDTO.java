@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class SnapshotResponseDTO {
 
@@ -20,6 +21,30 @@ public class SnapshotResponseDTO {
         private String title;
         private String description;
         private String code;
+        private LocalDateTime createdAt;
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class SnapshotDetailResponse {
+        private Long snapshotId;
+        private String title;
+        private String description;
+        private String code;
+        private LocalDateTime createdAt;
+        private List<CommentDetailResponse> comments;
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CommentDetailResponse {
+        private Long commentId;
+        private String content;
+        private boolean isChecked;
         private LocalDateTime createdAt;
     }
 }
