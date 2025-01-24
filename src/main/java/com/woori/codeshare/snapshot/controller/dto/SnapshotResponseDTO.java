@@ -1,5 +1,6 @@
 package com.woori.codeshare.snapshot.controller.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -44,6 +45,7 @@ public class SnapshotResponseDTO {
     public static class CommentDetailResponse {
         private Long commentId;
         private String content;
+        @JsonProperty("isChecked")
         private boolean isChecked;
         private LocalDateTime createdAt;
     }

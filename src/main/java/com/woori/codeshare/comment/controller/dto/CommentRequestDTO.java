@@ -1,5 +1,6 @@
 package com.woori.codeshare.comment.controller.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -23,7 +24,7 @@ public class CommentRequestDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class CommentResolveRequest {
-        private Long commentId;
+        @JsonProperty("isChecked")
         private boolean isChecked;
     }
 
@@ -31,7 +32,6 @@ public class CommentRequestDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class CommentUpdateRequest {
-        private Long commentId;
         private String content;
     }
 }
