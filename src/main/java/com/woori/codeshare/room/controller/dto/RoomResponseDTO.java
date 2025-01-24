@@ -12,10 +12,10 @@ public class RoomResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class RoomCreateResponse {
-        private Long roomId;    // 방 ID
-        private String uuid;    // 고유 식별자
-        private String title;   // 방 제목
-        private LocalDateTime createdAt; // 방 생성 시각
+        private Long roomId;
+        private String uuid;
+        private String title;
+        private LocalDateTime createdAt;
     }
 
     @Builder
@@ -23,9 +23,9 @@ public class RoomResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class RoomEnterResponse {
-        private Long roomId;    // 방 ID
-        private String uuid;    // 방 고유 식별자
-        private String title;   // 방 제목
-        private LocalDateTime createdAt; // 방 생성 시각
+        private Long roomId;
+        private String uuid;
+        private String title;
+        private LocalDateTime createdAt;
     }
 }

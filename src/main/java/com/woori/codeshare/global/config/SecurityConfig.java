@@ -7,9 +7,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Configuration
 public class SecurityConfig {
 
-    /**
-     * BCryptPasswordEncoder를 Bean으로 등록
-     */
+
+    // bcrypt 암호화 객체를 빈으로 등록
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

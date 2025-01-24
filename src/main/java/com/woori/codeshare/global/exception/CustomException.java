@@ -8,7 +8,7 @@ public class CustomException extends RuntimeException {
     private final BaseErrorCode errorCode;
 
     public CustomException(BaseErrorCode errorCode) {
-        super(errorCode.getMessage()); // 예외 메시지를 부모 클래스에 전달
+        super(errorCode.getMessage());
         this.errorCode = errorCode;
     }
 }

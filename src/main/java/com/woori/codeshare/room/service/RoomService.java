@@ -32,10 +32,8 @@ public class RoomService {
             throw new RoomException(RoomErrorCode.DUPLICATE_ROOM_TITLE); // 중복 예외 발생
         }
 
-        // 비밀번호 암호화
         String encryptedPassword = passwordEncoder.encode(request.getPassword());
 
-        // 고유 식별자 생성
         String uuid = UUID.randomUUID().toString();
 
         // Room 엔티티 생성 및 저장

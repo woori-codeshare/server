@@ -15,24 +15,24 @@ public class Room {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long roomId;  // 방 고유 ID
+    private Long roomId;
 
     @Column(unique = true, nullable = false)
-    private String uuid;  // 클라이언트용 방 고유 식별자
+    private String uuid;
 
     @Column(nullable = false)
-    private String title;  // 방 제목
+    private String title;
 
     @Column(nullable = false)
-    private String password;  // 방 비밀번호
+    private String password;
 
-    private LocalDateTime createdAt;  // 방 생성 시각
+    private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Snapshot> snapshots;  // 방이 포함하는 스냅샷 목록
+    private List<Snapshot> snapshots;
 
     @PrePersist
     public void prePersist() {
-        this.createdAt = LocalDateTime.now();  // 생성 시각 자동 설정
+        this.createdAt = LocalDateTime.now();
     }
 }
