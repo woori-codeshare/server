@@ -5,8 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 public class CommentResponseDTO {
 
     @Getter
@@ -17,7 +15,5 @@ public class CommentResponseDTO {
         private Long commentId;
         private Long snapshotId;
         private String content;
-        private boolean isChecked;
-        private LocalDateTime createdAt;
     }
 }

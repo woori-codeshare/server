@@ -43,8 +43,6 @@ public class CommentService {
                 .commentId(savedComment.getCommentId())
                 .snapshotId(snapshot.getSnapshotId())
                 .content(savedComment.getContent())
-                .isChecked(savedComment.isChecked())
-                .createdAt(savedComment.getCreatedAt())
                 .build();
     }
 }
