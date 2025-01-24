@@ -21,6 +21,9 @@ public class Snapshot {
     @JoinColumn(name = "room_id", nullable = false)
     private Room room;  // 스냅샷이 속한 방 (FK)
 
+    @Column
+    private String title;  // 스냅샷 제목
+
     @Column(length = 500)
     private String description;  // 스냅샷 설명
 
