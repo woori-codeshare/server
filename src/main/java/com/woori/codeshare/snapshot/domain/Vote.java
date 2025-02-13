@@ -19,6 +19,6 @@ public class Vote {
 
     private String title;
 
-    private int positive;
-    private int negative;
+    @Enumerated(EnumType.STRING)
+    private VoteType voteType;
 }
