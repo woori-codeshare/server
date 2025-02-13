@@ -8,6 +8,7 @@ import com.woori.codeshare.vote.controller.dto.VoteRequestDTO;
 import com.woori.codeshare.vote.controller.dto.VoteResponseDTO;
 import com.woori.codeshare.vote.domain.Vote;
 import com.woori.codeshare.vote.domain.VoteRecord;
+import com.woori.codeshare.vote.domain.VoteType;
 import com.woori.codeshare.vote.exception.VoteErrorCode;
 import com.woori.codeshare.vote.exception.VoteException;
 import com.woori.codeshare.vote.repository.VoteRecordRepository;
@@ -15,6 +16,10 @@ import com.woori.codeshare.vote.repository.VoteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -85,7 +90,7 @@ public class VoteService {
     @Transactional
     public VoteResponseDTO.VoteTitleUpdateResponse updateVoteTitle(Long voteId, VoteRequestDTO.VoteTitleUpdateRequest request) {
         Vote vote = voteRepository.findById(voteId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 ID의 투표가 존재하지 않습니다."));
+                .orElseThrow(() -> new VoteException(VoteErrorCode.VOTE_NOT_FOUND));
 
         vote.updateTitle(request.getTitle());
         Vote updatedVote = voteRepository.save(vote);
@@ -93,6 +98,37 @@ public class VoteService {
         return VoteResponseDTO.VoteTitleUpdateResponse.builder()
                 .voteId(updatedVote.getVoteId())
                 .title(updatedVote.getTitle())
+                .build();
+    }
+
+    /**
+     * 특정 투표 결과 조회 로직
+     *
+     * @param voteId 투표 ID
+     * @return 전체 투표 결과 응답 DTO
+     */
+    @Transactional
+    public VoteResponseDTO.VoteResultResponse getVoteResults(Long voteId) {
+        if (!voteRecordRepository.existsByVoteId(voteId)) {
+            throw new VoteException(VoteErrorCode.VOTE_NOT_FOUND);
+        }
+
+        List<Object[]> results = voteRecordRepository.countVotesByVoteId(voteId);
+
+        Map<String, Integer> voteCounts = new HashMap<>();
+        for (VoteType type : VoteType.values()) {
+            voteCounts.put(type.name(), 0);
+        }
+
+        for (Object[] row : results) {
+            VoteType voteType = (VoteType) row[0];
+            Long count = (Long) row[1];
+            voteCounts.put(voteType.name(), count.intValue());
+        }
+
+        return VoteResponseDTO.VoteResultResponse.builder()
+                .voteId(voteId)
+                .voteCounts(voteCounts)
                 .build();
     }
 }

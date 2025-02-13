@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 public class VoteResponseDTO {
 
@@ -37,5 +38,14 @@ public class VoteResponseDTO {
     public static class VoteTitleUpdateResponse {
         private Long voteId;
         private String title;
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class VoteResultResponse {
+        private Long voteId;
+        private Map<String, Integer> voteCounts;
     }
 }

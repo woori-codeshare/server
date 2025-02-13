@@ -72,4 +72,16 @@ public class VoteController {
         return ResponseEntity.ok(ApiResponse.of(ResponseCode.SUCCESS, responseDTO));
     }
 
+    /**
+     * 특정 투표 결과 조회 API
+     */
+    @GetMapping("/{voteId}")
+    @Operation(summary = "투표 결과 조회 API", description = "특정 투표의 결과를 조회합니다.")
+    public ResponseEntity<ApiResponse<VoteResponseDTO.VoteResultResponse>> getVoteResults(
+            @Parameter(description = "투표 ID", required = true, example = "1")
+            @PathVariable(name = "voteId") Long voteId) {
+
+        VoteResponseDTO.VoteResultResponse responseDTO = voteService.getVoteResults(voteId);
+        return ResponseEntity.ok(ApiResponse.of(ResponseCode.SUCCESS, responseDTO));
+    }
 }
