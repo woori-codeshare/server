@@ -80,10 +80,10 @@ public class VoteController {
     }
 
     /**
-     * 특정 스냅샷의 모든 투표 결과 조회 API
+     * 특정 스냅샷의 전체 투표 결과 조회 API
      */
     @GetMapping("/snapshot/{snapshotId}/results/all")
-    @Operation(summary = "특정 스냅샷의 모든 투표 결과 조회 API", description = "특정 스냅샷의 모든 투표 결과를 조회합니다.")
+    @Operation(summary = "특정 스냅샷의 전체 투표 결과 조회 API", description = "특정 스냅샷의 모든 투표 결과를 조회합니다.")
     public ResponseEntity<ApiResponse<List<VoteResponseDTO.VoteResultResponse>>> getAllVoteResultsBySnapshot(
             @Parameter(description = "스냅샷 ID", required = true, example = "1")
             @PathVariable(name = "snapshotId") Long snapshotId) {
