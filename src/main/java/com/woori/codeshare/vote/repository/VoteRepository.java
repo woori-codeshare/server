@@ -1,6 +1,6 @@
-package com.woori.codeshare.snapshot.repository;
+package com.woori.codeshare.vote.repository;
 
-import com.woori.codeshare.snapshot.domain.Vote;
+import com.woori.codeshare.vote.domain.Vote;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

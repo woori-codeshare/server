@@ -2,6 +2,7 @@ package com.woori.codeshare.snapshot.domain;
 
 import com.woori.codeshare.comment.domain.Comment;
 import com.woori.codeshare.room.domain.Room;
+import com.woori.codeshare.vote.domain.Vote;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;

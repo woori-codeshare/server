@@ -1,5 +1,6 @@
-package com.woori.codeshare.snapshot.controller.dto;
+package com.woori.codeshare.vote.controller.dto;
 
+import com.woori.codeshare.vote.domain.VoteType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,5 +19,14 @@ public class VoteResponseDTO {
         private Long snapshotId;
         private String title;
         private LocalDateTime createdAt;
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class VoteCastResponse {
+        private Long voteId;
+        private VoteType voteType;
     }
 }
