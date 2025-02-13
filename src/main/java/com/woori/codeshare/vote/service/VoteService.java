@@ -141,6 +141,10 @@ public class VoteService {
      */
     @Transactional(readOnly = true)
     public List<VoteResponseDTO.VoteResultResponse> getAllVoteResultsBySnapshot(Long snapshotId) {
+        if (!snapshotRepository.existsById(snapshotId)) {
+            throw new SnapshotException(SnapshotErrorCode.SNAPSHOT_NOT_FOUND);
+        }
+
         List<Object[]> results = voteRecordRepository.countVotesBySnapshotId(snapshotId);
 
         // 결과를 그룹화하기 위한 맵: key = voteId, value = Map<voteType, count>
@@ -172,4 +176,18 @@ public class VoteService {
         return responseList;
     }
 
+    /**
+     * 특정 투표 삭제 로직
+     *
+     * @param voteId 삭제할 투표 ID
+     */
+    @Transactional
+    public void deleteVote(Long voteId) {
+        // 투표 존재 여부 확인
+        Vote vote = voteRepository.findById(voteId)
+                .orElseThrow(() -> new VoteException(VoteErrorCode.VOTE_NOT_FOUND));
+
+        // 투표 삭제
+        voteRepository.delete(vote);
+    }
 }

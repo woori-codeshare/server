@@ -26,10 +26,6 @@ public class VoteController {
 
     /**
      * 투표 생성 API
-     *
-     * @param snapshotId 스냅샷 ID
-     * @param request    투표 생성 요청 DTO
-     * @return 생성된 투표 응답 DTO
      */
     @PostMapping("/{snapshotId}/new")
     @Operation(summary = "투표 생성 API", description = "특정 스냅샷에 대한 투표를 생성합니다.")
@@ -44,10 +40,6 @@ public class VoteController {
 
     /**
      * 투표 진행하기 API
-     *
-     * @param voteId  투표 ID
-     * @param request 투표 진행 요청 DTO
-     * @return 투표 결과 응답 DTO
      */
     @PostMapping("/{voteId}/cast")
     @Operation(summary = "투표 진행하기 API", description = "특정 투표에 대해 투표를 진행합니다.")
@@ -78,7 +70,7 @@ public class VoteController {
      * 특정 투표 결과 조회 API
      */
     @GetMapping("/{voteId}/results")
-    @Operation(summary = "투표 결과 조회 API", description = "특정 투표의 결과를 조회합니다.")
+    @Operation(summary = "특정 투표 결과 조회 API", description = "특정 투표의 결과를 조회합니다.")
     public ResponseEntity<ApiResponse<VoteResponseDTO.VoteResultResponse>> getVoteResults(
             @Parameter(description = "투표 ID", required = true, example = "1")
             @PathVariable(name = "voteId") Long voteId) {
@@ -91,7 +83,7 @@ public class VoteController {
      * 특정 스냅샷의 모든 투표 결과 조회 API
      */
     @GetMapping("/snapshot/{snapshotId}/results/all")
-    @Operation(summary = "스냅샷 투표 결과 조회 API", description = "특정 스냅샷의 모든 투표 결과를 조회합니다.")
+    @Operation(summary = "특정 스냅샷의 모든 투표 결과 조회 API", description = "특정 스냅샷의 모든 투표 결과를 조회합니다.")
     public ResponseEntity<ApiResponse<List<VoteResponseDTO.VoteResultResponse>>> getAllVoteResultsBySnapshot(
             @Parameter(description = "스냅샷 ID", required = true, example = "1")
             @PathVariable(name = "snapshotId") Long snapshotId) {
@@ -100,4 +92,16 @@ public class VoteController {
         return ResponseEntity.ok(ApiResponse.of(ResponseCode.SUCCESS, responseList));
     }
 
+    /**
+     * 특정 투표 삭제 API
+     */
+    @DeleteMapping("/{voteId}")
+    @Operation(summary = "투표 삭제 API", description = "voteId에 따라 특정 투표를 삭제합니다.")
+    public ResponseEntity<ApiResponse<Void>> deleteVote(
+            @Parameter(description = "투표 ID", required = true, example = "1")
+            @PathVariable(name = "voteId") Long voteId) {
+
+        voteService.deleteVote(voteId);
+        return ResponseEntity.ok(ApiResponse.of(ResponseCode.SUCCESS, null));
+    }
 }
