@@ -24,4 +24,12 @@ public class VoteRequestDTO {
         @NotNull(message = "투표 타입은 필수입니다.")
         private VoteType voteType;
     }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class VoteTitleUpdateRequest {
+        @NotBlank(message = "투표 제목은 필수입니다.")
+        private String title;
+    }
 }

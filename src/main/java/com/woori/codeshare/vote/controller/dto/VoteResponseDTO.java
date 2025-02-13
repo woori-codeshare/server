@@ -29,4 +29,13 @@ public class VoteResponseDTO {
         private Long voteId;
         private VoteType voteType;
     }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class VoteTitleUpdateResponse {
+        private Long voteId;
+        private String title;
+    }
 }

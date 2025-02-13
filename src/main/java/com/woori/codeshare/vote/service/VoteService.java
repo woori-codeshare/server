@@ -60,22 +60,39 @@ public class VoteService {
      */
     @Transactional
     public VoteResponseDTO.VoteCastResponse castVote(Long voteId, VoteRequestDTO.VoteCastRequest request) {
-        // 투표 ID를 이용해 Vote 조회
         Vote vote = voteRepository.findById(voteId)
                 .orElseThrow(() -> new VoteException(VoteErrorCode.VOTE_NOT_FOUND));
 
-        // 투표 기록 생성
         VoteRecord voteRecord = new VoteRecord();
         voteRecord.setVote(vote);
         voteRecord.setVoteType(request.getVoteType());
 
-        // 저장
         voteRecordRepository.save(voteRecord);
 
-        // 응답 DTO 생성
         return VoteResponseDTO.VoteCastResponse.builder()
                 .voteId(vote.getVoteId())
                 .voteType(request.getVoteType())
+                .build();
+    }
+
+    /**
+     * 투표 제목 수정 로직
+     *
+     * @param voteId  투표 ID
+     * @param request 투표 제목 수정 요청 DTO
+     * @return 투표 제목 수정 응답 DTO
+     */
+    @Transactional
+    public VoteResponseDTO.VoteTitleUpdateResponse updateVoteTitle(Long voteId, VoteRequestDTO.VoteTitleUpdateRequest request) {
+        Vote vote = voteRepository.findById(voteId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 ID의 투표가 존재하지 않습니다."));
+
+        vote.updateTitle(request.getTitle());
+        Vote updatedVote = voteRepository.save(vote);
+
+        return VoteResponseDTO.VoteTitleUpdateResponse.builder()
+                .voteId(updatedVote.getVoteId())
+                .title(updatedVote.getTitle())
                 .build();
     }
 }

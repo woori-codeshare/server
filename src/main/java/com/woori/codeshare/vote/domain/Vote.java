@@ -32,4 +32,8 @@ public class Vote {
     public void prePersist() {
         this.createdAt = LocalDateTime.now();
     }
+
+    public void updateTitle(String newTitle) {
+        this.title = newTitle;
+    }
 }

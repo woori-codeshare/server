@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -50,11 +51,25 @@ public class VoteController {
     @Operation(summary = "투표 진행하기 API", description = "특정 투표에 대해 투표를 진행합니다.")
     public ResponseEntity<ApiResponse<VoteResponseDTO.VoteCastResponse>> castVote(
             @Parameter(description = "투표 ID", required = true, example = "10")
-            @PathVariable Long voteId,
+            @PathVariable(name = "voteId") Long voteId,
             @RequestBody @Valid VoteRequestDTO.VoteCastRequest request) {
 
         voteService.castVote(voteId, request);
         return ResponseEntity.ok(ApiResponse.of(ResponseCode.SUCCESS));
+    }
+
+    /**
+     * 투표 제목 수정 API
+     */
+    @PatchMapping("/{voteId}/title")
+    @Operation(summary = "투표 제목 수정 API", description = "특정 투표의 제목을 수정합니다.")
+    public ResponseEntity<ApiResponse<VoteResponseDTO.VoteTitleUpdateResponse>> updateVoteTitle(
+            @Parameter(description = "투표 ID", required = true, example = "1")
+            @PathVariable(name = "voteId") Long voteId,
+            @RequestBody @Validated VoteRequestDTO.VoteTitleUpdateRequest request) {
+
+        VoteResponseDTO.VoteTitleUpdateResponse responseDTO = voteService.updateVoteTitle(voteId, request);
+        return ResponseEntity.ok(ApiResponse.of(ResponseCode.SUCCESS, responseDTO));
     }
 
 }
