@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -131,4 +132,44 @@ public class VoteService {
                 .voteCounts(voteCounts)
                 .build();
     }
+
+    /**
+     * 특정 스냅샷의 모든 투표 결과 조회 로직
+     *
+     * @param snapshotId 스냅샷 ID
+     * @return 스냅샷에 속한 모든 투표의 결과 리스트
+     */
+    @Transactional(readOnly = true)
+    public List<VoteResponseDTO.VoteResultResponse> getAllVoteResultsBySnapshot(Long snapshotId) {
+        List<Object[]> results = voteRecordRepository.countVotesBySnapshotId(snapshotId);
+
+        // 결과를 그룹화하기 위한 맵: key = voteId, value = Map<voteType, count>
+        Map<Long, Map<String, Integer>> snapshotVoteMap = new HashMap<>();
+
+        for (Object[] row : results) {
+            Long voteId = (Long) row[0];
+            VoteType voteType = (VoteType) row[1];
+            Long count = (Long) row[2];
+
+            snapshotVoteMap.putIfAbsent(voteId, new HashMap<>());
+            Map<String, Integer> voteCounts = snapshotVoteMap.get(voteId);
+
+            for (VoteType type : VoteType.values()) {
+                voteCounts.putIfAbsent(type.name(), 0);
+            }
+
+            voteCounts.put(voteType.name(), count.intValue());
+        }
+
+        List<VoteResponseDTO.VoteResultResponse> responseList = new ArrayList<>();
+        for (Map.Entry<Long, Map<String, Integer>> entry : snapshotVoteMap.entrySet()) {
+            responseList.add(VoteResponseDTO.VoteResultResponse.builder()
+                    .voteId(entry.getKey())
+                    .voteCounts(entry.getValue())
+                    .build());
+        }
+
+        return responseList;
+    }
+
 }

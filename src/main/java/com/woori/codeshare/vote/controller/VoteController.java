@@ -14,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/votes/")
@@ -75,7 +77,7 @@ public class VoteController {
     /**
      * 특정 투표 결과 조회 API
      */
-    @GetMapping("/{voteId}")
+    @GetMapping("/{voteId}/results")
     @Operation(summary = "투표 결과 조회 API", description = "특정 투표의 결과를 조회합니다.")
     public ResponseEntity<ApiResponse<VoteResponseDTO.VoteResultResponse>> getVoteResults(
             @Parameter(description = "투표 ID", required = true, example = "1")
@@ -84,4 +86,18 @@ public class VoteController {
         VoteResponseDTO.VoteResultResponse responseDTO = voteService.getVoteResults(voteId);
         return ResponseEntity.ok(ApiResponse.of(ResponseCode.SUCCESS, responseDTO));
     }
+
+    /**
+     * 특정 스냅샷의 모든 투표 결과 조회 API
+     */
+    @GetMapping("/snapshot/{snapshotId}/results/all")
+    @Operation(summary = "스냅샷 투표 결과 조회 API", description = "특정 스냅샷의 모든 투표 결과를 조회합니다.")
+    public ResponseEntity<ApiResponse<List<VoteResponseDTO.VoteResultResponse>>> getAllVoteResultsBySnapshot(
+            @Parameter(description = "스냅샷 ID", required = true, example = "1")
+            @PathVariable(name = "snapshotId") Long snapshotId) {
+
+        List<VoteResponseDTO.VoteResultResponse> responseList = voteService.getAllVoteResultsBySnapshot(snapshotId);
+        return ResponseEntity.ok(ApiResponse.of(ResponseCode.SUCCESS, responseList));
+    }
+
 }
