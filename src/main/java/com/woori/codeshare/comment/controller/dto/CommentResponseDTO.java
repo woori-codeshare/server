@@ -15,6 +15,7 @@ public class CommentResponseDTO {
     @AllArgsConstructor
     public static class CommentCreateResponse {
         private Long commentId;
+        private Long parentCommentId;
         private Long snapshotId;
         private String content;
     }

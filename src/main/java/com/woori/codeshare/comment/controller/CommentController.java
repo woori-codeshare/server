@@ -28,7 +28,7 @@ public class CommentController {
      * @return 댓글 등록 응답 DTO
      */
     @PostMapping
-    @Operation(summary = "댓글 등록 API", description = "특정 스냅샷에 댓글(질문)을 등록합니다.")
+    @Operation(summary = "질문(댓글) 등록 API", description = "특정 스냅샷에 댓글(질문)을 등록합니다.")
     public ResponseEntity<ApiResponse<CommentResponseDTO.CommentCreateResponse>> addComment(
             @RequestBody @Valid CommentRequestDTO.CommentCreateRequest request) {
 

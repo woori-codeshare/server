@@ -1,17 +1,17 @@
 package com.woori.codeshare.vote.domain;
 
+import com.woori.codeshare.global.config.BaseDateTimeEntity;
 import com.woori.codeshare.snapshot.domain.Snapshot;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
 @Data
 @NoArgsConstructor
-public class Vote {
+public class Vote extends BaseDateTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,13 +25,6 @@ public class Vote {
 
     @OneToMany(mappedBy = "vote", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<VoteRecord> voteRecords;
-
-    private LocalDateTime createdAt;
-
-    @PrePersist
-    public void prePersist() {
-        this.createdAt = LocalDateTime.now();
-    }
 
     public void updateTitle(String newTitle) {
         this.title = newTitle;

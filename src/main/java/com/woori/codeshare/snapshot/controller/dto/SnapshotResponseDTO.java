@@ -43,6 +43,7 @@ public class SnapshotResponseDTO {
     @AllArgsConstructor
     public static class CommentDetailResponse {
         private Long commentId;
+        private Long parentCommentId;
         private String content;
         private boolean solved;
         private LocalDateTime createdAt;

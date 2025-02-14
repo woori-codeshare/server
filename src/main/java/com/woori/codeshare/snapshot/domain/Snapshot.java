@@ -1,19 +1,19 @@
 package com.woori.codeshare.snapshot.domain;
 
 import com.woori.codeshare.comment.domain.Comment;
+import com.woori.codeshare.global.config.BaseDateTimeEntity;
 import com.woori.codeshare.room.domain.Room;
 import com.woori.codeshare.vote.domain.Vote;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
 @Data
 @NoArgsConstructor
-public class Snapshot {
+public class Snapshot extends BaseDateTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,16 +32,9 @@ public class Snapshot {
     @Lob  // Large Object
     private String code;
 
-    private LocalDateTime createdAt;
-
     @OneToMany(mappedBy = "snapshot", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
 
     @OneToMany(mappedBy = "snapshot", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Vote> votes;
-
-    @PrePersist
-    public void prePersist() {
-        this.createdAt = LocalDateTime.now();  // 생성 시각 자동 설정
-    }
 }

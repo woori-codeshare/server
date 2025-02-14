@@ -14,8 +14,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-
 @Service
 @RequiredArgsConstructor
 public class CommentService {
@@ -34,14 +32,23 @@ public class CommentService {
         Snapshot snapshot = snapshotRepository.findById(request.getSnapshotId())
                 .orElseThrow(() -> new SnapshotException(SnapshotErrorCode.SNAPSHOT_NOT_FOUND));
 
+        Comment parentComment = null;
+        if (request.getParentCommentId() != null) {
+            parentComment = commentRepository.findById(request.getParentCommentId())
+                    .orElseThrow(() -> new IllegalArgumentException("부모 댓글이 존재하지 않습니다."));
+        }
+
         Comment comment = new Comment();
         comment.setSnapshot(snapshot);
         comment.setContent(request.getContent());
         comment.setSolved(false);
+        comment.setParentComment(parentComment);
+
         Comment savedComment = commentRepository.save(comment);
 
         return CommentResponseDTO.CommentCreateResponse.builder()
                 .commentId(savedComment.getCommentId())
+                .parentCommentId(parentComment != null ? parentComment.getCommentId() : null)
                 .snapshotId(snapshot.getSnapshotId())
                 .content(savedComment.getContent())
                 .build();
@@ -79,7 +86,6 @@ public class CommentService {
                 .orElseThrow(() -> new CommentException(CommentErrorCode.COMMENT_NOT_FOUND));
 
         comment.setContent(request.getContent());
-        comment.setUpdatedAt(LocalDateTime.now());
 
         Comment updatedComment = commentRepository.save(comment);
 

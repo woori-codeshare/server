@@ -1,17 +1,17 @@
 package com.woori.codeshare.room.domain;
 
+import com.woori.codeshare.global.config.BaseDateTimeEntity;
 import com.woori.codeshare.snapshot.domain.Snapshot;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
 @Data
 @NoArgsConstructor
-public class Room {
+public class Room extends BaseDateTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,13 +26,6 @@ public class Room {
     @Column(nullable = false)
     private String password;
 
-    private LocalDateTime createdAt;
-
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Snapshot> snapshots;
-
-    @PrePersist
-    public void prePersist() {
-        this.createdAt = LocalDateTime.now();
-    }
 }
