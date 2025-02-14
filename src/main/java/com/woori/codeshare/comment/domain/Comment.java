@@ -1,16 +1,15 @@
 package com.woori.codeshare.comment.domain;
 
+import com.woori.codeshare.global.config.BaseDateTimeEntity;
 import com.woori.codeshare.snapshot.domain.Snapshot;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Entity
 @Data
 @NoArgsConstructor
-public class Comment {
+public class Comment extends BaseDateTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,13 +23,4 @@ public class Comment {
     private String content;
 
     private boolean solved;
-
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
-
-    @PrePersist
-    public void prePersist() {
-        this.createdAt = LocalDateTime.now();
-    }
 }
