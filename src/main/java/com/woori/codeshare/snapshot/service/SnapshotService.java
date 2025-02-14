@@ -92,6 +92,7 @@ public class SnapshotService {
                 .createdAt(snapshot.getCreatedAt())
                 .comments(snapshot.getComments().stream().map(comment -> SnapshotResponseDTO.CommentDetailResponse.builder()
                         .commentId(comment.getCommentId())
+                        .parentCommentId(comment.getParentComment() != null ? comment.getParentComment().getCommentId() : null)
                         .content(comment.getContent())
                         .solved(comment.isSolved())
                         .createdAt(comment.getCreatedAt())
