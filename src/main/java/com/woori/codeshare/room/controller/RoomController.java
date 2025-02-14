@@ -27,9 +27,9 @@ public class RoomController {
      * 방 생성 API
      *
      * @param request 방 생성 요청 DTO
-     * @return 방 생성 응답 DTO
+     * @return 방 생성 응답 DTO (공유 URL 포함)
      */
-    @Operation(summary = "방 생성 API", description = "방 제목과 비밀번호를 사용하여 방에 입장합니다.")
+    @Operation(summary = "방 생성 API", description = "방 제목과 비밀번호를 사용하여 방을 생성합니다.")
     @PostMapping("/new")
     public ResponseEntity<ApiResponse<RoomResponseDTO.RoomCreateResponse>> createRoom(
             @RequestBody RoomRequestDTO.RoomCreateRequest request) {
@@ -38,20 +38,21 @@ public class RoomController {
     }
 
     /**
-     * 방 입장 API
+     * 방 입장 API (UUID 기반)
      *
-     * @param roomId   방 ID
+     * @param uuid     방 UUID
      * @param password 비밀번호
      * @return 방 입장 결과
      */
-    @PostMapping("/{roomId}/enter")
-    @Operation(summary = "방 입장 API", description = "방 ID와 비밀번호를 사용하여 방에 입장합니다.")
+    @PostMapping("/enter/{uuid}")
+    @Operation(summary = "방 입장 API", description = "방 UUID와 비밀번호를 사용하여 방에 입장합니다.")
     public ResponseEntity<ApiResponse<RoomResponseDTO.RoomEnterResponse>> enterRoom(
-            @Parameter(description = "방의 고유 ID", required = true, example = "1")
-            @PathVariable(name = "roomId") Long roomId,
+            @Parameter(description = "방의 UUID", required = true, example = "4e1bf933-cc30-4b74-840e-c2afc9532704")
+            @PathVariable(name = "uuid") String uuid,
             @Parameter(description = "방 비밀번호", required = true, example = "1234")
             @RequestParam(name = "password") String password) {
-        RoomResponseDTO.RoomEnterResponse responseDTO = roomService.enterRoom(roomId, password);
+        RoomResponseDTO.RoomEnterResponse responseDTO = roomService.enterRoomByUuid(uuid, password);
         return ResponseEntity.ok(ApiResponse.of(ResponseCode.CONFIRM, responseDTO));
     }
 }
+

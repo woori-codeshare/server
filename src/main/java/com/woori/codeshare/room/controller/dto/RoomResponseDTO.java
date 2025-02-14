@@ -15,6 +15,7 @@ public class RoomResponseDTO {
         private Long roomId;
         private String uuid;
         private String title;
+        private String sharedUrl;
         private LocalDateTime createdAt;
     }
 
