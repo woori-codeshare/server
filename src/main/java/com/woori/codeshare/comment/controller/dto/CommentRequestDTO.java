@@ -17,6 +17,8 @@ public class CommentRequestDTO {
 
         @NotBlank(message = "댓글 내용은 필수입니다.")
         private String content;
+
+        private Long parentCommentId; // 대댓글일 때만 전달
     }
 
     @Getter
