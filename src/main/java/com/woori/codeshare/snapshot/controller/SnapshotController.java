@@ -43,13 +43,13 @@ public class SnapshotController {
      * @param roomId 방 ID
      * @return 스냅샷 상세 목록 응답 DTO
      */
-    @GetMapping("/{roomId}/")
+    @GetMapping("/{uuid}/")
     @Operation(summary = "스냅샷 목록 조회 API", description = "방 ID를 사용하여 해당 방의 스냅샷과 질문 목록을 조회합니다.")
     public ResponseEntity<ApiResponse<List<SnapshotResponseDTO.SnapshotDetailResponse>>> getSnapshots(
             @Parameter(description = "방 ID", required = true, example = "1")
-            @PathVariable(name = "roomId") Long roomId) {
+            @PathVariable(name = "uuid") String uuid) {
 
-        List<SnapshotResponseDTO.SnapshotDetailResponse> snapshots = snapshotService.getSnapshots(roomId);
+        List<SnapshotResponseDTO.SnapshotDetailResponse> snapshots = snapshotService.getSnapshots(uuid);
         return ResponseEntity.ok(ApiResponse.of(snapshots));
     }
 }

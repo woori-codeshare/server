@@ -73,12 +73,12 @@ public class SnapshotService {
     /**
      * 스냅샷 목록 조회
      *
-     * @param roomId 방 ID
+     * @param uuid 방 UUID
      * @return 스냅샷 상세 목록 응답 DTO
      */
     @Transactional
-    public List<SnapshotResponseDTO.SnapshotDetailResponse> getSnapshots(Long roomId) {
-        Room room = roomRepository.findById(roomId)
+    public List<SnapshotResponseDTO.SnapshotDetailResponse> getSnapshots(String uuid) {
+        Room room = roomRepository.findByUuid(uuid)
                 .orElseThrow(() -> new RoomException(RoomErrorCode.ROOM_NOT_FOUND));
 
         List<Snapshot> snapshots = snapshotRepository.findSnapshotsWithCommentsByRoomAndCreatedAtAfter(room, room.getCreatedAt());
