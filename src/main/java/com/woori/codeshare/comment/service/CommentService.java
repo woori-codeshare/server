@@ -14,6 +14,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class CommentService {
@@ -28,8 +31,8 @@ public class CommentService {
      * @return 등록된 댓글 응답 DTO
      */
     @Transactional
-    public CommentResponseDTO.CommentCreateResponse addComment(CommentRequestDTO.CommentCreateRequest request) {
-        Snapshot snapshot = snapshotRepository.findById(request.getSnapshotId())
+    public CommentResponseDTO.CommentCreateResponse addComment(Long snapshotId, CommentRequestDTO.CommentCreateRequest request) {
+        Snapshot snapshot = snapshotRepository.findById(snapshotId)
                 .orElseThrow(() -> new SnapshotException(SnapshotErrorCode.SNAPSHOT_NOT_FOUND));
 
         Comment parentComment = null;
@@ -106,5 +109,31 @@ public class CommentService {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CommentException(CommentErrorCode.COMMENT_NOT_FOUND));
         commentRepository.delete(comment);
+    }
+
+    /**
+     * 질문 목록 조회 로직
+     *
+     * @param snapshotId 스냅샷 ID
+     */
+    @Transactional
+    public List<CommentResponseDTO.CommentListResponse> getComments(Long snapshotId) {
+        Snapshot snapshot = snapshotRepository.findById(snapshotId)
+                .orElseThrow(() -> new SnapshotException(SnapshotErrorCode.SNAPSHOT_NOT_FOUND));
+
+        // snapshotId로 댓글 목록 조회
+        List<Comment> comments = commentRepository.findBySnapshotId(snapshotId);
+
+        // 댓글 목록 Response DTO로 변환 후 반환
+        return comments.stream()
+                .map(comment -> CommentResponseDTO.CommentListResponse.builder()
+                        .commentId(comment.getCommentId())
+                        .parentCommentId(comment.getParentComment() != null ? comment.getParentComment().getCommentId() : null)
+                        .content(comment.getContent())
+                        .solved(comment.isSolved())
+                        .createdAt(comment.getCreatedAt())
+                        .updatedAt(comment.getUpdatedAt())
+                        .build())
+                .collect(Collectors.toList());
     }
 }

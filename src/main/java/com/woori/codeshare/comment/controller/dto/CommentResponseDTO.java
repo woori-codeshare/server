@@ -38,4 +38,17 @@ public class CommentResponseDTO {
         private String content;
         private LocalDateTime updatedAt;
     }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CommentListResponse {
+        private Long commentId;
+        private Long parentCommentId;
+        private String content;
+        private boolean solved;
+        private LocalDateTime createdAt;
+        private LocalDateTime updatedAt;
+    }
 }

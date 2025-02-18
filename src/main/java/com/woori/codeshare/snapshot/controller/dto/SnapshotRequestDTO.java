@@ -10,7 +10,6 @@ public class SnapshotRequestDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class SnapshotCreateRequest {
-        private Long roomId;
         private String title;
         private String description;
         private String code;

@@ -30,8 +30,8 @@ public class SnapshotService {
      * @return 저장된 스냅샷 응답 DTO
      */
     @Transactional
-    public SnapshotResponseDTO.SnapshotCreateResponse saveSnapshot(SnapshotRequestDTO.SnapshotCreateRequest request) {
-        Room room = roomRepository.findById(request.getRoomId())
+    public SnapshotResponseDTO.SnapshotCreateResponse saveSnapshot(Long roomId, SnapshotRequestDTO.SnapshotCreateRequest request) {
+        Room room = roomRepository.findById(roomId)
                 .orElseThrow(() -> new RoomException(RoomErrorCode.ROOM_NOT_FOUND));
 
         String snapshotTitle = request.getTitle();
