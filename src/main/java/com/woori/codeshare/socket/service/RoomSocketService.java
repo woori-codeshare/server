@@ -1,0 +1,94 @@
+package com.woori.codeshare.socket.service;
+
+import com.woori.codeshare.socket.controller.dto.SocketDTO;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+@Service
+@RequiredArgsConstructor
+@Slf4j
+public class RoomSocketService {
+
+    private final SimpMessagingTemplate messagingTemplate;
+
+    // 방별 익명 사용자 목록 (roomId -> 사용자 리스트)
+    private final Map<Long, List<String>> roomUsers = new ConcurrentHashMap<>();
+
+    /**
+     * 방 입장 로직
+     */
+    @Transactional
+    public void joinRoom(SocketDTO.RoomJoinRequest request) {
+        Long roomId = request.getRoomId();
+
+        // 방에 존재하는 사용자 목록 가져오기
+        roomUsers.putIfAbsent(roomId, new ArrayList<>());
+        List<String> users = roomUsers.get(roomId);
+
+        // 새로운 익명 사용자 추가
+        String newNickname = generateUniqueNickname(users);
+        users.add(newNickname);
+
+        log.info("[WebSocket] 방 입장: roomId={}, nickname={}", roomId, newNickname);
+
+        // 업데이트된 사용자 목록을 전송
+        sendUpdatedUserList(roomId, users, "JOIN");
+    }
+
+    /**
+     * 방 나가기 로직
+     */
+    @Transactional
+    public void leaveRoom(SocketDTO.RoomLeaveRequest request) {
+        Long roomId = request.getRoomId();
+        String nickname = request.getNickname();
+
+        if (roomUsers.containsKey(roomId)) {
+            List<String> users = roomUsers.get(roomId);
+            users.remove(nickname);
+
+            log.info("[WebSocket] 방 나감: roomId={}, nickname={}", roomId, nickname);
+
+            // 업데이트된 사용자 목록을 전송
+            sendUpdatedUserList(roomId, users, "LEAVE");
+        }
+    }
+
+    /**
+     * 익명 닉네임 생성 (중복 방지)
+     */
+    private String generateUniqueNickname(List<String> existingUsers) {
+        int index = 1;
+        String nickname;
+
+        do {
+            nickname = "익명" + index;
+            index++;
+        } while (existingUsers.contains(nickname));
+
+        return nickname;
+    }
+
+    /**
+     * 방 사용자 목록 업데이트 및 전송
+     */
+    private void sendUpdatedUserList(Long roomId, List<String> users, String eventType) {
+        SocketDTO.RoomUserListResponse response =
+                SocketDTO.RoomUserListResponse.builder()
+                        .roomId(roomId)
+                        .users(users)
+                        .eventType(eventType)
+                        .build();
+
+        messagingTemplate.convertAndSend("/topic/room/" + roomId + "/users", response);
+    }
+}
+
