@@ -51,14 +51,33 @@ public class RoomSocketService {
         Long roomId = request.getRoomId();
         String nickname = request.getNickname();
 
-        if (roomUsers.containsKey(roomId)) {
-            List<String> users = roomUsers.get(roomId);
-            users.remove(nickname);
+        if (!roomUsers.containsKey(roomId)) {
+            log.warn("[WebSocket] 방이 존재하지 않음: roomId={}", roomId);
+            // 클라이언트에게 방이 존재하지 않는다는 메시지를 보냄
+            messagingTemplate.convertAndSend("/topic/room/" + roomId + "/errors",
+                    "방이 존재하지 않습니다: roomId=" + roomId);
+            return;
+        }
 
+        List<String> users = roomUsers.get(roomId);
+        log.info("[WebSocket] 기존 방 유저 목록: {}", users);
+
+        if (users.remove(nickname)) {
             log.info("[WebSocket] 방 나감: roomId={}, nickname={}", roomId, nickname);
+            log.info("[WebSocket] 나간 후 남은 유저 목록: {}", users);
+
+            // 사용자가 아무도 없으면 방 목록에서 삭제
+            if (users.isEmpty()) {
+                roomUsers.remove(roomId);
+                log.info("[WebSocket] 방 삭제됨: roomId={}", roomId);
+            }
 
             // 업데이트된 사용자 목록을 전송
             sendUpdatedUserList(roomId, users, "LEAVE");
+        } else {
+            log.warn("[WebSocket] 방 나가기 요청했지만 해당 닉네임이 존재하지 않음: roomId={}, nickname={}", roomId, nickname);
+            messagingTemplate.convertAndSend("/topic/room/" + roomId + "/errors",
+                    "닉네임이 존재하지 않습니다: " + nickname);
         }
     }
 

@@ -29,7 +29,7 @@ public class RoomSocketController {
      */
     @MessageMapping("/leave.room")
     public void leaveRoom(@Payload SocketDTO.RoomLeaveRequest request) {
-
+        log.info("[WebSocket] 방 나가기 요청: roomId={}, nickname={}", request.getRoomId(), request.getNickname());
         roomSocketService.leaveRoom(request);
     }
 }
