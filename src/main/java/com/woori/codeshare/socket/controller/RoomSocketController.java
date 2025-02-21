@@ -32,6 +32,11 @@ public class RoomSocketController {
         log.info("[WebSocket] 방 나가기 요청: roomId={}, nickname={}", request.getRoomId(), request.getNickname());
         roomSocketService.leaveRoom(request);
     }
+
+    @MessageMapping("/connect")
+    public void handleConnect() {
+        log.info("✅ STOMP CONNECT 요청 수신됨");
+    }
 }
 
 

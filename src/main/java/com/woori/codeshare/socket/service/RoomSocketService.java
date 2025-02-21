@@ -39,7 +39,6 @@ public class RoomSocketService {
 
         log.info("[WebSocket] 방 입장: roomId={}, nickname={}", roomId, newNickname);
 
-        // 업데이트된 사용자 목록을 전송
         sendUpdatedUserList(roomId, users, "JOIN");
     }
 
@@ -53,7 +52,6 @@ public class RoomSocketService {
 
         if (!roomUsers.containsKey(roomId)) {
             log.warn("[WebSocket] 방이 존재하지 않음: roomId={}", roomId);
-            // 클라이언트에게 방이 존재하지 않는다는 메시지를 보냄
             messagingTemplate.convertAndSend("/topic/room/" + roomId + "/errors",
                     "방이 존재하지 않습니다: roomId=" + roomId);
             return;
@@ -72,7 +70,6 @@ public class RoomSocketService {
                 log.info("[WebSocket] 방 삭제됨: roomId={}", roomId);
             }
 
-            // 업데이트된 사용자 목록을 전송
             sendUpdatedUserList(roomId, users, "LEAVE");
         } else {
             log.warn("[WebSocket] 방 나가기 요청했지만 해당 닉네임이 존재하지 않음: roomId={}, nickname={}", roomId, nickname);
@@ -104,6 +101,7 @@ public class RoomSocketService {
                 SocketDTO.RoomUserListResponse.builder()
                         .roomId(roomId)
                         .users(users)
+                        .userCount(users.size())
                         .eventType(eventType)
                         .build();
 

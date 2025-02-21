@@ -31,6 +31,7 @@ public class SocketDTO {
     public static class RoomUserListResponse {
         private Long roomId;
         private List<String> users;
+        private int userCount;
         private String eventType; // JOIN or LEAVE
     }
 }
