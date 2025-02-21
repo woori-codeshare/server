@@ -25,6 +25,8 @@ logging:
       hibernate:
         SQL: DEBUG
         type: trace
+    org.springframework.web.socket: DEBUG
+    org.springframework.messaging: DEBUG
 
 springdoc:
   default-consumes-media-type: application/json;charset=UTF-8
