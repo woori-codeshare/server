@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-public class SocketDTO {
+public class RoomSocketDTO {
 
     @Getter
     @NoArgsConstructor
