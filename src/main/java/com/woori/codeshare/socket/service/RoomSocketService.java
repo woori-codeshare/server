@@ -1,6 +1,6 @@
 package com.woori.codeshare.socket.service;
 
-import com.woori.codeshare.socket.controller.dto.SocketDTO;
+import com.woori.codeshare.socket.controller.dto.RoomSocketDTO;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +26,7 @@ public class RoomSocketService {
      * 방 입장 로직
      */
     @Transactional
-    public void joinRoom(SocketDTO.RoomJoinRequest request) {
+    public void joinRoom(RoomSocketDTO.RoomJoinRequest request) {
         Long roomId = request.getRoomId();
 
         // 방에 존재하는 사용자 목록 가져오기
@@ -46,7 +46,7 @@ public class RoomSocketService {
      * 방 나가기 로직
      */
     @Transactional
-    public void leaveRoom(SocketDTO.RoomLeaveRequest request) {
+    public void leaveRoom(RoomSocketDTO.RoomLeaveRequest request) {
         Long roomId = request.getRoomId();
         String nickname = request.getNickname();
 
@@ -97,8 +97,8 @@ public class RoomSocketService {
      * 방 사용자 목록 업데이트 및 전송
      */
     private void sendUpdatedUserList(Long roomId, List<String> users, String eventType) {
-        SocketDTO.RoomUserListResponse response =
-                SocketDTO.RoomUserListResponse.builder()
+        RoomSocketDTO.RoomUserListResponse response =
+                RoomSocketDTO.RoomUserListResponse.builder()
                         .roomId(roomId)
                         .users(users)
                         .userCount(users.size())
