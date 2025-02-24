@@ -30,6 +30,7 @@ public class RoomSocketDTO {
     @AllArgsConstructor
     public static class RoomUserListResponse {
         private Long roomId;
+        private String nickname;
         private List<String> users;
         private int userCount;
         private String eventType; // JOIN or LEAVE

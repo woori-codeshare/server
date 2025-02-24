@@ -39,7 +39,7 @@ public class RoomSocketService {
 
         log.info("[WebSocket] 방 입장: roomId={}, nickname={}", roomId, newNickname);
 
-        sendUpdatedUserList(roomId, users, "JOIN");
+        sendUpdatedUserList(roomId, newNickname, users, "JOIN");
     }
 
     /**
@@ -70,7 +70,7 @@ public class RoomSocketService {
                 log.info("[WebSocket] 방 삭제됨: roomId={}", roomId);
             }
 
-            sendUpdatedUserList(roomId, users, "LEAVE");
+            sendUpdatedUserList(roomId, nickname, users, "LEAVE");
         } else {
             log.warn("[WebSocket] 방 나가기 요청했지만 해당 닉네임이 존재하지 않음: roomId={}, nickname={}", roomId, nickname);
             messagingTemplate.convertAndSend("/topic/room/" + roomId + "/errors",
@@ -96,10 +96,11 @@ public class RoomSocketService {
     /**
      * 방 사용자 목록 업데이트 및 전송
      */
-    private void sendUpdatedUserList(Long roomId, List<String> users, String eventType) {
+    private void sendUpdatedUserList(Long roomId, String newnickname, List<String> users, String eventType) {
         RoomSocketDTO.RoomUserListResponse response =
                 RoomSocketDTO.RoomUserListResponse.builder()
                         .roomId(roomId)
+                        .nickname(newnickname)
                         .users(users)
                         .userCount(users.size())
                         .eventType(eventType)
