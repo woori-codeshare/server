@@ -10,10 +10,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOriginPatterns("*")
+                .allowedOriginPatterns("http://localhost:3000", "https://*.woorifisa.site")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
                 .allowedHeaders("*")
-                .allowCredentials(false) // 쿠키 전송 비허용(로그인 없는 버전)
+                .allowCredentials(true) // 쿠키 및 인증 헤더 허용
                 .maxAge(3600); // Preflight 요청 유효시간 1시간
     }
 }
