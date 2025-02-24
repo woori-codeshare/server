@@ -14,6 +14,7 @@ import com.woori.codeshare.vote.exception.VoteException;
 import com.woori.codeshare.vote.repository.VoteRecordRepository;
 import com.woori.codeshare.vote.repository.VoteRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +25,7 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class VoteService {
 
     private final VoteRepository voteRepository;
@@ -110,15 +112,23 @@ public class VoteService {
      */
     @Transactional
     public VoteResponseDTO.VoteResultResponse getVoteResults(Long voteId) {
-        if (!voteRecordRepository.existsByVoteId(voteId)) {
+        // 먼저 vote 자체가 존재하는지 확인
+        if (!voteRepository.existsById(voteId)) {
             throw new VoteException(VoteErrorCode.VOTE_NOT_FOUND);
         }
 
+        // 투표 기록이 있는지 확인
+        if (!voteRecordRepository.existsByVoteId(voteId)) {
+            log.warn("[Vote] 투표 ID={}에 대한 기록이 없음. 기본값(0) 반환", voteId);
+            return createEmptyVoteResponse(voteId);
+        }
+
+        // 실제 투표 결과 조회
         List<Object[]> results = voteRecordRepository.countVotesByVoteId(voteId);
 
         Map<String, Integer> voteCounts = new HashMap<>();
         for (VoteType type : VoteType.values()) {
-            voteCounts.put(type.name(), 0);
+            voteCounts.put(type.name(), 0); // 기본값 0
         }
 
         for (Object[] row : results) {
@@ -132,6 +142,21 @@ public class VoteService {
                 .voteCounts(voteCounts)
                 .build();
     }
+
+    /**
+     * 투표 기록이 없는 경우 기본값을 반환하는 메서드
+     */
+    private VoteResponseDTO.VoteResultResponse createEmptyVoteResponse(Long voteId) {
+        Map<String, Integer> emptyVoteCounts = new HashMap<>();
+        for (VoteType type : VoteType.values()) {
+            emptyVoteCounts.put(type.name(), 0);
+        }
+        return VoteResponseDTO.VoteResultResponse.builder()
+                .voteId(voteId)
+                .voteCounts(emptyVoteCounts)
+                .build();
+    }
+
 
     /**
      * 특정 스냅샷의 모든 투표 결과 조회 로직
