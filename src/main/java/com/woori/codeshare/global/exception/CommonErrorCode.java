@@ -19,7 +19,9 @@ public enum CommonErrorCode implements BaseErrorCode {
 
     // 페이징 관련 에러
     PAGE_NEGATIVE_INPUT(HttpStatus.BAD_REQUEST, "PAGE4001", "페이지 번호는 1이상의 숫자여야 합니다."),
-    ;
+
+    // JSON 관련 에러 추가
+    INVALID_JSON_FORMAT(HttpStatus.BAD_REQUEST, "JSON4001", "JSON 형식이 올바르지 않습니다. \" 기호가 포함된 경우 \\\" 로 이스케이프 처리하세요.");
 
     private final HttpStatus httpStatus;
     private final String code;
@@ -27,11 +29,11 @@ public enum CommonErrorCode implements BaseErrorCode {
 
     @Override
     public ErrorResponse getErrorResponse() {
-        return null;
+        return ErrorResponse.of(code, message);
     }
 
     @Override
     public HttpStatus getStatus() {
-        return null;
+        return httpStatus;
     }
 }
