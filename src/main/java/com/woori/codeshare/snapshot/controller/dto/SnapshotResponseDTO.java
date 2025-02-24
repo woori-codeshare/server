@@ -16,8 +16,9 @@ public class SnapshotResponseDTO {
     @AllArgsConstructor
     public static class SnapshotCreateResponse {
 
-        private Long snapshotId;
         private Long roomId;
+        private Long snapshotId;
+        private Long voteId;
         private String title;
         private String description;
         private String code;

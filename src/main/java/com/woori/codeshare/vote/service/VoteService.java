@@ -190,4 +190,20 @@ public class VoteService {
         // 투표 삭제
         voteRepository.delete(vote);
     }
+
+    /**
+     * 스냅샷 생성 시 기본 투표 생성 (title: "이해되었나요?")
+     */
+    @Transactional
+    public Long createDefaultVoteForSnapshot(Long snapshotId) {
+        Snapshot snapshot = snapshotRepository.findById(snapshotId)
+                .orElseThrow(() -> new SnapshotException(SnapshotErrorCode.SNAPSHOT_NOT_FOUND));
+
+        Vote vote = new Vote();
+        vote.setSnapshot(snapshot);
+        vote.setTitle("이해되었나요?"); // 기본 투표 제목 설정
+
+        Vote savedVote = voteRepository.save(vote);
+        return savedVote.getVoteId();
+    }
 }

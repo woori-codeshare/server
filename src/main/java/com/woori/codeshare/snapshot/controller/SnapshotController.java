@@ -29,7 +29,7 @@ public class SnapshotController {
      * @return 스냅샷 저장 응답 DTO
      */
     @PostMapping("/{roomId}")
-    @Operation(summary = "스냅샷 저장 API", description = "특정 방에 대한 코드 스냅샷을 저장합니다.")
+    @Operation(summary = "스냅샷 생성 API", description = "특정 방에 대한 코드 스냅샷을 저장합니다.")
     public ResponseEntity<ApiResponse<SnapshotResponseDTO.SnapshotCreateResponse>> saveSnapshot(
             @Parameter(description = "방 ID", required = true, example = "1")
             @PathVariable(name = "roomId") Long roomId,
