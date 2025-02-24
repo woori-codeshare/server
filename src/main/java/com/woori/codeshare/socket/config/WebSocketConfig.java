@@ -12,7 +12,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 import java.util.List;
 
 @Configuration
-@EnableWebSocket    // WebSocket 활성화
+@EnableWebSocket                // WebSocket 활성화
 @EnableWebSocketMessageBroker   // STOMP 활성화
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
@@ -28,14 +28,14 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         // 클라이언트가 WebSocket 서버에 연결할 엔드포인트 설정
         registry.addEndpoint("/ws")
-                .setAllowedOrigins("*")
-                .withSockJS();  // SockJS 사용 설정 (WebSocket 미지원 브라우저에서도 폴백)
+                .setAllowedOriginPatterns("http://localhost:3000", "https://*.woorifisa.site")
+                .withSockJS();  // SockJS 사용 설정 (WebSocket 미지원 브라우저에서도 폴백 가능하도록)
     }
 
     @Override
     public boolean configureMessageConverters(List<MessageConverter> converters) {
         converters.add(new MappingJackson2MessageConverter());
-        return false;  // 기본 메시지 컨버터를 유지
+        return false;  // 기본 메시지 컨버터 유지
     }
 
 }
