@@ -14,6 +14,9 @@ public class VoteRecord extends BaseDateTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long voteRecordId;
 
+    @Column(nullable = false, unique = true)
+    private String sessionId;
+
     @ManyToOne
     @JoinColumn(name = "vote_id", nullable = false)
     private Vote vote;

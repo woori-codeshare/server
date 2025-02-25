@@ -13,6 +13,7 @@ import com.woori.codeshare.vote.exception.VoteErrorCode;
 import com.woori.codeshare.vote.exception.VoteException;
 import com.woori.codeshare.vote.repository.VoteRecordRepository;
 import com.woori.codeshare.vote.repository.VoteRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -62,20 +63,33 @@ public class VoteService {
     /**
      * 투표 진행 로직
      *
-     * @param voteId  투표 ID
-     * @param request 투표 진행 요청 DTO
+     * @param voteId      투표 ID
+     * @param request     투표 요청 DTO
+     * @param httpRequest HTTP 요청 객체 (세션 ID 가져오기)
      * @return 투표 결과 응답 DTO
      */
     @Transactional
-    public VoteResponseDTO.VoteCastResponse castVote(Long voteId, VoteRequestDTO.VoteCastRequest request) {
+    public VoteResponseDTO.VoteCastResponse castVote(Long voteId, VoteRequestDTO.VoteCastRequest request, HttpServletRequest httpRequest) {
+        // 세션 ID 가져오기
+        String sessionId = httpRequest.getSession().getId();
+
+        // 세션 ID 기반 중복 투표 여부 확인
+        if (voteRecordRepository.existsByVoteIdAndSessionId(voteId, sessionId)) {
+            throw new VoteException(VoteErrorCode.VOTE_ALREADY_CASTED);
+        }
+
         Vote vote = voteRepository.findById(voteId)
                 .orElseThrow(() -> new VoteException(VoteErrorCode.VOTE_NOT_FOUND));
 
+        // 새로운 투표 기록 생성 (세션 ID 포함)
         VoteRecord voteRecord = new VoteRecord();
+        voteRecord.setSessionId(sessionId); // 세션 ID 저장
         voteRecord.setVote(vote);
         voteRecord.setVoteType(request.getVoteType());
 
         voteRecordRepository.save(voteRecord);
+
+        log.info("[Vote] 투표 완료: voteId={}, sessionId={}, voteType={}", voteId, sessionId, request.getVoteType());
 
         return VoteResponseDTO.VoteCastResponse.builder()
                 .voteId(vote.getVoteId())
