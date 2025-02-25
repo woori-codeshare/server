@@ -8,6 +8,7 @@ import com.woori.codeshare.vote.service.VoteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -46,11 +47,13 @@ public class VoteController {
     public ResponseEntity<ApiResponse<VoteResponseDTO.VoteCastResponse>> castVote(
             @Parameter(description = "투표 ID", required = true, example = "10")
             @PathVariable(name = "voteId") Long voteId,
-            @RequestBody @Valid VoteRequestDTO.VoteCastRequest request) {
+            @RequestBody @Valid VoteRequestDTO.VoteCastRequest request,
+            HttpServletRequest httpRequest) {
 
-        voteService.castVote(voteId, request);
+        voteService.castVote(voteId, request, httpRequest);
         return ResponseEntity.ok(ApiResponse.of(ResponseCode.SUCCESS));
     }
+
 
     /**
      * 투표 제목 수정 API

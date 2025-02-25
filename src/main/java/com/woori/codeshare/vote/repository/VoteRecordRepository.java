@@ -24,6 +24,10 @@ public interface VoteRecordRepository extends JpaRepository<VoteRecord, Long> {
             "WHERE v.vote.snapshot.snapshotId = :snapshotId " +
             "GROUP BY v.vote.voteId, v.voteType")
     List<Object[]> countVotesBySnapshotId(@Param("snapshotId") Long snapshotId);
+
+    // 특정 voteId에 대한 중복 투표 여부 확인 (세션 ID 기반)
+    @Query("SELECT COUNT(v) > 0 FROM VoteRecord v WHERE v.vote.voteId = :voteId AND v.sessionId = :sessionId")
+    boolean existsByVoteIdAndSessionId(@Param("voteId") Long voteId, @Param("sessionId") String sessionId);
 }
 
 

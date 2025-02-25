@@ -9,7 +9,8 @@ import org.springframework.http.HttpStatus;
 @Getter
 @AllArgsConstructor
 public enum VoteErrorCode implements BaseErrorCode {
-    VOTE_NOT_FOUND(HttpStatus.NOT_FOUND, "VOTE404", "존재하지 않는 투표입니다.");
+    VOTE_NOT_FOUND(HttpStatus.NOT_FOUND, "VOTE404", "존재하지 않는 투표입니다."),
+    VOTE_ALREADY_CASTED(HttpStatus.BAD_REQUEST, "VOTE404", "이미 투표한 사용자입니다.");
 
     private final HttpStatus status;
     private final String code;
