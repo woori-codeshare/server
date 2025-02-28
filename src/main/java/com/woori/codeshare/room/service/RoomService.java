@@ -1,12 +1,17 @@
 package com.woori.codeshare.room.service;
 
 
+import com.woori.codeshare.room.controller.dto.LiveSessionRequestDTO;
+import com.woori.codeshare.room.controller.dto.LiveSessionResponseDTO;
 import com.woori.codeshare.room.controller.dto.RoomRequestDTO;
 import com.woori.codeshare.room.controller.dto.RoomResponseDTO;
+import com.woori.codeshare.room.domain.LiveSession;
 import com.woori.codeshare.room.domain.Room;
 import com.woori.codeshare.room.exception.RoomErrorCode;
 import com.woori.codeshare.room.exception.RoomException;
+import com.woori.codeshare.room.repository.LiveSessionRepository;
 import com.woori.codeshare.room.repository.RoomRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,6 +23,7 @@ import java.util.UUID;
 public class RoomService {
 
     private final RoomRepository roomRepository;
+    private final LiveSessionRepository liveSessionRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
     /**
@@ -76,5 +82,47 @@ public class RoomService {
                 .createdAt(room.getCreatedAt())
                 .build();
     }
+
+    /**
+     * 현재 코드 세션 저장
+     */
+    @Transactional
+    public LiveSessionResponseDTO.LiveSessionResponse saveLiveSession(Long roomId, LiveSessionRequestDTO.LiveSessionRequest request) {
+        Room room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new RoomException(RoomErrorCode.ROOM_NOT_FOUND));
+
+        // 기존 Live Session이 존재하면 업데이트, 없으면 새로 생성
+        LiveSession liveSession = liveSessionRepository.findByRoom_RoomId(roomId)
+                .orElse(new LiveSession(room));
+
+        liveSession.setCode(request.getCode());
+        liveSessionRepository.save(liveSession);
+
+
+        return LiveSessionResponseDTO.LiveSessionResponse.builder()
+                .roomId(roomId)
+                .code(liveSession.getCode())
+                .updatedAt(liveSession.getUpdatedAt())
+                .build();
+    }
+
+    /**
+     * 현재 코드 세션 조회
+     */
+    @Transactional()
+    public LiveSessionResponseDTO.LiveSessionResponse getLiveSession(Long roomId) {
+        Room room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new RoomException(RoomErrorCode.ROOM_NOT_FOUND));
+
+        LiveSession liveSession = liveSessionRepository.findByRoom_RoomId(roomId)
+                .orElseThrow(() -> new RoomException(RoomErrorCode.LIVE_SESSION_NOT_FOUND));
+
+        return LiveSessionResponseDTO.LiveSessionResponse.builder()
+                .roomId(roomId)
+                .code(liveSession.getCode())
+                .updatedAt(liveSession.getUpdatedAt())
+                .build();
+    }
+
 }
 
