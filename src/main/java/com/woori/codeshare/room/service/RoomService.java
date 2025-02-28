@@ -105,5 +105,23 @@ public class RoomService {
                 .build();
     }
 
+    /**
+     * 현재 코드 세션 조회
+     */
+    @Transactional()
+    public CurrentSessionResponseDTO.CurrentSessionResponse getCurrentSession(Long roomId) {
+        Room room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new RoomException(RoomErrorCode.ROOM_NOT_FOUND));
+
+        CurrentSession currentSession = currentSessionRepository.findByRoom_RoomId(roomId)
+                .orElseThrow(() -> new RoomException(RoomErrorCode.CURRENT_SESSION_NOT_FOUND));
+
+        return CurrentSessionResponseDTO.CurrentSessionResponse.builder()
+                .roomId(roomId)
+                .code(currentSession.getCode())
+                .updatedAt(currentSession.getUpdatedAt())
+                .build();
+    }
+
 }
 

@@ -70,5 +70,17 @@ public class RoomController {
         return ResponseEntity.ok(ApiResponse.of(ResponseCode.SUCCESS, response));
     }
 
+    /**
+     * 현재 코드 세션 조회 API
+     */
+    @GetMapping("/{roomId}/current-session")
+    @Operation(summary = "현재 코드 세션 조회 API", description = "특정 방의 실시간 코드 내용을 조회합니다.")
+    public ResponseEntity<ApiResponse<CurrentSessionResponseDTO.CurrentSessionResponse>> getCurrentSession(
+            @PathVariable Long roomId) {
+
+        CurrentSessionResponseDTO.CurrentSessionResponse response = roomService.getCurrentSession(roomId);
+        return ResponseEntity.ok(ApiResponse.of(ResponseCode.SUCCESS, response));
+    }
+
 }
 
