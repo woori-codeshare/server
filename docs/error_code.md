@@ -58,6 +58,10 @@
 
 - **COMMENT404: 존재하지 않는 댓글입니다.**
 
+## ✅ **Live Session 오류**
+
+- **LIVE_SESSION404: 존재하지 않는 Live Session id 값입니다.**
+
 ---
 
 ## ✅ **페이징 오류**
