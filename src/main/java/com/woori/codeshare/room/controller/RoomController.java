@@ -2,8 +2,8 @@ package com.woori.codeshare.room.controller;
 
 import com.woori.codeshare.global.response.ApiResponse;
 import com.woori.codeshare.global.response.ResponseCode;
-import com.woori.codeshare.room.controller.dto.CurrentSessionRequestDTO;
-import com.woori.codeshare.room.controller.dto.CurrentSessionResponseDTO;
+import com.woori.codeshare.room.controller.dto.LiveSessionRequestDTO;
+import com.woori.codeshare.room.controller.dto.LiveSessionResponseDTO;
 import com.woori.codeshare.room.controller.dto.RoomRequestDTO;
 import com.woori.codeshare.room.controller.dto.RoomResponseDTO;
 import com.woori.codeshare.room.service.RoomService;
@@ -62,11 +62,11 @@ public class RoomController {
      */
     @PostMapping("/{roomId}/current-session/save")
     @Operation(summary = "현재 코드 세션 저장 API", description = "특정 방의 실시간 코드 내용을 저장합니다.")
-    public ResponseEntity<ApiResponse<CurrentSessionResponseDTO.CurrentSessionResponse>> saveCurrentSession(
+    public ResponseEntity<ApiResponse<LiveSessionResponseDTO.LiveSessionResponse>> saveLiveSession(
             @PathVariable Long roomId,
-            @RequestBody CurrentSessionRequestDTO.CurrentSessionRequest request) {
+            @RequestBody LiveSessionRequestDTO.LiveSessionRequest request) {
 
-        CurrentSessionResponseDTO.CurrentSessionResponse response = roomService.saveCurrentSession(roomId, request);
+        LiveSessionResponseDTO.LiveSessionResponse response = roomService.saveLiveSession(roomId, request);
         return ResponseEntity.ok(ApiResponse.of(ResponseCode.SUCCESS, response));
     }
 
@@ -75,10 +75,10 @@ public class RoomController {
      */
     @GetMapping("/{roomId}/current-session")
     @Operation(summary = "현재 코드 세션 조회 API", description = "특정 방의 실시간 코드 내용을 조회합니다.")
-    public ResponseEntity<ApiResponse<CurrentSessionResponseDTO.CurrentSessionResponse>> getCurrentSession(
+    public ResponseEntity<ApiResponse<LiveSessionResponseDTO.LiveSessionResponse>> getLiveSession(
             @PathVariable Long roomId) {
 
-        CurrentSessionResponseDTO.CurrentSessionResponse response = roomService.getCurrentSession(roomId);
+        LiveSessionResponseDTO.LiveSessionResponse response = roomService.getLiveSession(roomId);
         return ResponseEntity.ok(ApiResponse.of(ResponseCode.SUCCESS, response));
     }
 

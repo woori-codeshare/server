@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Data
 @NoArgsConstructor
-public class CurrentSession extends BaseDateTimeEntity {
+public class LiveSession extends BaseDateTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +21,7 @@ public class CurrentSession extends BaseDateTimeEntity {
     @Lob
     private String code;
 
-    public CurrentSession(Room room) {
+    public LiveSession(Room room) {
         this.room = room;
         this.code = "";
     }

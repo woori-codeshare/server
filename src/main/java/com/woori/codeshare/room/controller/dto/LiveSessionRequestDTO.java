@@ -1,21 +1,15 @@
 package com.woori.codeshare.room.controller.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
-public class CurrentSessionResponseDTO {
+public class LiveSessionRequestDTO {
 
     @Getter
-    @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class CurrentSessionResponse {
-        private Long roomId;
+    public static class LiveSessionRequest {
         private String code;
-        private LocalDateTime updatedAt;
     }
 }

@@ -1,15 +1,15 @@
 package com.woori.codeshare.room.service;
 
 
-import com.woori.codeshare.room.controller.dto.CurrentSessionRequestDTO;
-import com.woori.codeshare.room.controller.dto.CurrentSessionResponseDTO;
+import com.woori.codeshare.room.controller.dto.LiveSessionRequestDTO;
+import com.woori.codeshare.room.controller.dto.LiveSessionResponseDTO;
 import com.woori.codeshare.room.controller.dto.RoomRequestDTO;
 import com.woori.codeshare.room.controller.dto.RoomResponseDTO;
-import com.woori.codeshare.room.domain.CurrentSession;
+import com.woori.codeshare.room.domain.LiveSession;
 import com.woori.codeshare.room.domain.Room;
 import com.woori.codeshare.room.exception.RoomErrorCode;
 import com.woori.codeshare.room.exception.RoomException;
-import com.woori.codeshare.room.repository.CurrentSessionRepository;
+import com.woori.codeshare.room.repository.LiveSessionRepository;
 import com.woori.codeshare.room.repository.RoomRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ import java.util.UUID;
 public class RoomService {
 
     private final RoomRepository roomRepository;
-    private final CurrentSessionRepository currentSessionRepository;
+    private final LiveSessionRepository liveSessionRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
     /**
@@ -87,21 +87,22 @@ public class RoomService {
      * 현재 코드 세션 저장
      */
     @Transactional
-    public CurrentSessionResponseDTO.CurrentSessionResponse saveCurrentSession(Long roomId, CurrentSessionRequestDTO.CurrentSessionRequest request) {
+    public LiveSessionResponseDTO.LiveSessionResponse saveLiveSession(Long roomId, LiveSessionRequestDTO.LiveSessionRequest request) {
         Room room = roomRepository.findById(roomId)
                 .orElseThrow(() -> new RoomException(RoomErrorCode.ROOM_NOT_FOUND));
 
-        // 기존 CurrentSession이 존재하면 업데이트, 없으면 새로 생성
-        CurrentSession currentSession = currentSessionRepository.findByRoom_RoomId(roomId)
-                .orElse(new CurrentSession(room));
+        // 기존 Live Session이 존재하면 업데이트, 없으면 새로 생성
+        LiveSession liveSession = liveSessionRepository.findByRoom_RoomId(roomId)
+                .orElse(new LiveSession(room));
 
-        currentSession.setCode(request.getCode());
-        currentSessionRepository.save(currentSession);
+        liveSession.setCode(request.getCode());
+        liveSessionRepository.save(liveSession);
 
-        return CurrentSessionResponseDTO.CurrentSessionResponse.builder()
+
+        return LiveSessionResponseDTO.LiveSessionResponse.builder()
                 .roomId(roomId)
-                .code(currentSession.getCode())
-                .updatedAt(currentSession.getUpdatedAt())
+                .code(liveSession.getCode())
+                .updatedAt(liveSession.getUpdatedAt())
                 .build();
     }
 
@@ -109,17 +110,17 @@ public class RoomService {
      * 현재 코드 세션 조회
      */
     @Transactional()
-    public CurrentSessionResponseDTO.CurrentSessionResponse getCurrentSession(Long roomId) {
+    public LiveSessionResponseDTO.LiveSessionResponse getLiveSession(Long roomId) {
         Room room = roomRepository.findById(roomId)
                 .orElseThrow(() -> new RoomException(RoomErrorCode.ROOM_NOT_FOUND));
 
-        CurrentSession currentSession = currentSessionRepository.findByRoom_RoomId(roomId)
-                .orElseThrow(() -> new RoomException(RoomErrorCode.CURRENT_SESSION_NOT_FOUND));
+        LiveSession liveSession = liveSessionRepository.findByRoom_RoomId(roomId)
+                .orElseThrow(() -> new RoomException(RoomErrorCode.LIVE_SESSION_NOT_FOUND));
 
-        return CurrentSessionResponseDTO.CurrentSessionResponse.builder()
+        return LiveSessionResponseDTO.LiveSessionResponse.builder()
                 .roomId(roomId)
-                .code(currentSession.getCode())
-                .updatedAt(currentSession.getUpdatedAt())
+                .code(liveSession.getCode())
+                .updatedAt(liveSession.getUpdatedAt())
                 .build();
     }
 
