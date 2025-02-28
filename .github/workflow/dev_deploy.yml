@@ -3,7 +3,7 @@ name: Woori-Codeshare DEV API CI/CD
 on:
   pull_request:
     branches:
-      - develop
+      - dev
     types:
       - closed
   workflow_dispatch:
