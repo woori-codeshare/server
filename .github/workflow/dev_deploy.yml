@@ -1,8 +1,12 @@
-name: Woori-Codeshare AWS ECR CI/CD Pipeline
+name: Woori-Codeshare DEV API CI/CD
 
 on:
-  release:
-    types: [ published ]
+  pull_request:
+    branches:
+      - develop
+    types:
+      - closed
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -53,8 +57,7 @@ jobs:
           push: true
           platforms: linux/amd64
           tags: |
-            ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.AWS_WCS_ECR_NAMESPACE }}/${{ secrets.AWS_WCS_ECR_REPO_NAME }}:latest
-            ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.AWS_WCS_ECR_NAMESPACE }}/${{ secrets.AWS_WCS_ECR_REPO_NAME }}:${{ github.event.release.tag_name }}
+            ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.AWS_WCS_ECR_NAMESPACE }}/${{ secrets.AWS_WCS_ECR_REPO_NAME }}
 
   deploy-to-ec2:
     runs-on: ubuntu-latest
@@ -70,14 +73,6 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
-
-      - name: Add GitHub Actions IP to Security group
-        run: |
-          aws ec2 authorize-security-group-ingress \
-            --group-id ${{ secrets.AWS_WCS_BACKEND_INSTANCE_SECURITY_GROUP_ID }} \
-            --protocol tcp \
-            --port 22 \
-            --cidr ${{ steps.ip.outputs.ipv4 }}/32
 
       - name: SSH into EC2 and Deploy
         uses: appleboy/ssh-action@v1.2.0
@@ -98,12 +93,3 @@ jobs:
             sudo docker run --name server -dp 8080:8080 \
               -e APP_VERSION=${{ github.event.release.tag_name }} \
               ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.AWS_WCS_ECR_NAMESPACE }}/${{ secrets.AWS_WCS_ECR_REPO_NAME }}:latest
-
-      - name: Remove GitHub Actions IP from Security group
-        if: always()
-        run: |
-          aws ec2 revoke-security-group-ingress \
-            --group-id ${{ secrets.AWS_WCS_BACKEND_INSTANCE_SECURITY_GROUP_ID }} \
-            --protocol tcp \
-            --port 22 \
-            --cidr ${{ steps.ip.outputs.ipv4 }}/32
