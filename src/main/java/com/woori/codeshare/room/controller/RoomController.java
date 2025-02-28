@@ -2,6 +2,8 @@ package com.woori.codeshare.room.controller;
 
 import com.woori.codeshare.global.response.ApiResponse;
 import com.woori.codeshare.global.response.ResponseCode;
+import com.woori.codeshare.room.controller.dto.CurrentSessionRequestDTO;
+import com.woori.codeshare.room.controller.dto.CurrentSessionResponseDTO;
 import com.woori.codeshare.room.controller.dto.RoomRequestDTO;
 import com.woori.codeshare.room.controller.dto.RoomResponseDTO;
 import com.woori.codeshare.room.service.RoomService;
@@ -54,5 +56,19 @@ public class RoomController {
         RoomResponseDTO.RoomEnterResponse responseDTO = roomService.enterRoomByUuid(uuid, password);
         return ResponseEntity.ok(ApiResponse.of(ResponseCode.CONFIRM, responseDTO));
     }
+
+    /**
+     * 현재 코드 세션 저장 API
+     */
+    @PostMapping("/{roomId}/current-session/save")
+    @Operation(summary = "현재 코드 세션 저장 API", description = "특정 방의 실시간 코드 내용을 저장합니다.")
+    public ResponseEntity<ApiResponse<CurrentSessionResponseDTO.CurrentSessionResponse>> saveCurrentSession(
+            @PathVariable Long roomId,
+            @RequestBody CurrentSessionRequestDTO.CurrentSessionRequest request) {
+
+        CurrentSessionResponseDTO.CurrentSessionResponse response = roomService.saveCurrentSession(roomId, request);
+        return ResponseEntity.ok(ApiResponse.of(ResponseCode.SUCCESS, response));
+    }
+
 }
 

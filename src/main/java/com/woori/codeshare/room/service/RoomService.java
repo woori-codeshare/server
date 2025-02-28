@@ -1,12 +1,17 @@
 package com.woori.codeshare.room.service;
 
 
+import com.woori.codeshare.room.controller.dto.CurrentSessionRequestDTO;
+import com.woori.codeshare.room.controller.dto.CurrentSessionResponseDTO;
 import com.woori.codeshare.room.controller.dto.RoomRequestDTO;
 import com.woori.codeshare.room.controller.dto.RoomResponseDTO;
+import com.woori.codeshare.room.domain.CurrentSession;
 import com.woori.codeshare.room.domain.Room;
 import com.woori.codeshare.room.exception.RoomErrorCode;
 import com.woori.codeshare.room.exception.RoomException;
+import com.woori.codeshare.room.repository.CurrentSessionRepository;
 import com.woori.codeshare.room.repository.RoomRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,6 +23,7 @@ import java.util.UUID;
 public class RoomService {
 
     private final RoomRepository roomRepository;
+    private final CurrentSessionRepository currentSessionRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
     /**
@@ -76,5 +82,28 @@ public class RoomService {
                 .createdAt(room.getCreatedAt())
                 .build();
     }
+
+    /**
+     * 현재 코드 세션 저장
+     */
+    @Transactional
+    public CurrentSessionResponseDTO.CurrentSessionResponse saveCurrentSession(Long roomId, CurrentSessionRequestDTO.CurrentSessionRequest request) {
+        Room room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new RoomException(RoomErrorCode.ROOM_NOT_FOUND));
+
+        // 기존 CurrentSession이 존재하면 업데이트, 없으면 새로 생성
+        CurrentSession currentSession = currentSessionRepository.findByRoom_RoomId(roomId)
+                .orElse(new CurrentSession(room));
+
+        currentSession.setCode(request.getCode());
+        currentSessionRepository.save(currentSession);
+
+        return CurrentSessionResponseDTO.CurrentSessionResponse.builder()
+                .roomId(roomId)
+                .code(currentSession.getCode())
+                .updatedAt(currentSession.getUpdatedAt())
+                .build();
+    }
+
 }
 
