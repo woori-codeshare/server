@@ -28,7 +28,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         // 클라이언트가 WebSocket 서버에 연결할 엔드포인트 설정
         registry.addEndpoint("/ws")
-                .setAllowedOriginPatterns("http://localhost:3000", "https://*.woorifisa.site")
+                .setAllowedOriginPatterns("http://localhost:3000", "https://www.wooricodeshare.com")
                 .withSockJS();  // SockJS 사용 설정 (WebSocket 미지원 브라우저에서도 폴백 가능하도록)
     }
 
