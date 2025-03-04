@@ -19,7 +19,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         // 클라이언트가 구독할 경로 설정 (브로드캐스트 전송 경로)
-        registry.enableSimpleBroker("/topic");
+        registry.enableSimpleBroker("/topic")
+                .setHeartbeatValue(new long[]{10000, 10000});  // 10초마다 서버와 핑을 주고 받음, 10초 이상 지속되면 websocket connection 종료
         // 클라이언트가 서버로 메시지를 보낼 경로 설정
         registry.setApplicationDestinationPrefixes("/app");
     }
@@ -29,7 +30,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         // 클라이언트가 WebSocket 서버에 연결할 엔드포인트 설정
         registry.addEndpoint("/ws")
                 .setAllowedOriginPatterns("http://localhost:3000", "https://www.wooricodeshare.com")
-                .withSockJS();  // SockJS 사용 설정 (WebSocket 미지원 브라우저에서도 폴백 가능하도록)
+                .withSockJS()  // SockJS 사용 설정 (WebSocket 미지원 브라우저에서도 폴백 가능하도록)
+                .setHeartbeatTime(20000); // SockJS 사용 시 핑 주기 조정 (20초)
     }
 
     @Override
@@ -37,5 +39,4 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         converters.add(new MappingJackson2MessageConverter());
         return false;  // 기본 메시지 컨버터 유지
     }
-
 }
