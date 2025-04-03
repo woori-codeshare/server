@@ -25,9 +25,9 @@ jobs:
 
       - name: Docker 시스템 정리
         run: |
-          docker system prune -af
-          docker volume prune -f
-          docker builder prune -af
+          sudo docker system prune -af
+          sudo docker volume prune -f
+          sudo docker builder prune -af
 
       - name: 디스크 공간 확인 (정리 후)
         run: df -h
@@ -52,14 +52,14 @@ jobs:
 
       - name: 기존 컨테이너 및 이미지 삭제
         run: |
-          docker stop server || true
-          docker rm server || true
-          docker rmi dev-server || true
+          sudo docker stop server || true
+          sudo docker rm server || true
+          sudo docker rmi dev-server || true
 
       - name: 도커 이미지 빌드
         run: |
-          docker build -t dev-server .
+          sudo docker build -t dev-server .
 
       - name: 도커 컨테이너 실행
         run: |
-          docker run -d --name server -p 8080:8080 dev-server
+          sudo docker run -d --name server -p 8080:8080 dev-server
