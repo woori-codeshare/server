@@ -3,7 +3,7 @@ name: Woori-Codeshare DEV API CI/CD
 on:
   push:
     branches:
-      - develop
+      - dev
 
 permissions:
   contents: read
