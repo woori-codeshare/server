@@ -6,9 +6,9 @@ Woori-CodeShare는 강사님의 코드를 실시간으로 공유하고, 스냅�
 
 1. 사용자는 방을 생성하거나, 기존 방에 참여할 수 있어요.
 
-   ![방 생성](docs/create-room.png)
+   ![방 생성](https://youtu.be/xZoLT4L6aOQ)
 
-   ![방 참여](docs/join-room.png)
+   ![방 참여](https://youtu.be/xZoLT4L6aOQ)
 
 
 2. 방에 참여한 사용자는 강사님의 코드를 실시간으로 공유받을 수 있어요.
