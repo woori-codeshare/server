@@ -6,30 +6,26 @@ Woori-CodeShare는 강사님의 코드를 실시간으로 공유하고, 스냅�
 
 1. 사용자는 방을 생성하거나, 기존 방에 참여할 수 있어요.
 
-   ![방 생성](https://youtu.be/xZoLT4L6aOQ)
+   [방 생성](https://youtu.be/xZoLT4L6aOQ)
 
-   ![방 참여](https://youtu.be/xZoLT4L6aOQ)
+   [방 참여](https://youtu.be/xZoLT4L6aOQ)
 
 
 2. 방에 참여한 사용자는 강사님의 코드를 실시간으로 공유받을 수 있어요.
 
-   ![코드 공유](docs/share-code.gif)
-   [시연영상](https://youtu.be/xZoLT4L6aOQ)
+   [코드 공유 시연영상](https://youtu.be/xZoLT4L6aOQ)
 
 
 3. 사용자는 코드를 스냅샷하여, 나중에 다시 볼 수 있어요.
 
-   ![코드 스냅샷](docs/snapshot-code.gif)
-   [시연영상](https://youtu.be/iJhQ_TBRRoE)
+   [코드 스냅샷 시연영상](https://youtu.be/iJhQ_TBRRoE)
 
 
 4. 사용자는 해당 코드가 이해가 되지 않은 경우, 질문을 남길 수 있어요.
 
-   ![질문하기](docs/ask-question.gif)
-   [시연영상](https://youtu.be/dMl7eJKyKDE)
+   [질문하기 시연영상](https://youtu.be/dMl7eJKyKDE)
 
 
 5. 사용자는 해당 코드에 대한 이해도를 표시할 수 있어요.
 
-   ![이해도 표시](docs/vote-difficulty.gif)
-   [시연영상](https://youtu.be/C8i-QXpfRqY)
+   [이해도 표시 시연영상](https://youtu.be/C8i-QXpfRqY)
